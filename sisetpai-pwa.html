@@ -530,6 +530,7 @@ function installApp(){
   <div class="player-melds" id="playerMelds"></div>
 
   <div class="action-bar">
+    <button class="abtn" id="giveUpBtn" onclick="playerGiveUp()" style="background:rgba(180,40,40,.45);border-color:rgba(255,80,80,.4);">放棄</button>
     <button class="abtn" id="drawBtn" onclick="playerDraw()">摸牌</button>
     <button class="abtn" id="cancelSelBtn" onclick="cancelSelection()" style="display:none;">取消</button>
     <button class="abtn" id="meldBtn" onclick="tryFormMeld()" style="display:none;background:rgba(201,168,76,.25);border-color:rgba(201,168,76,.5);">組合</button>
@@ -1272,7 +1273,7 @@ function render(){
       badgeText='👤 請出牌或組合';
       badgeColor='rgba(255,220,100,.9)';
     } else {
-      badgeText='👤 請摸牌或出牌';
+      badgeText='👤 請摸牌或放棄';
       badgeColor='rgba(255,220,100,.9)';
     }
   } else {
@@ -1285,6 +1286,10 @@ function render(){
   badge.classList.toggle('player-turn', G.turn==='player');
   const phEnabled = G.turn==='player' && !G.mustDiscard && !G.hasDrawn;
   document.getElementById('drawBtn').classList.toggle('off',!phEnabled);
+  // 放棄按鈕：玩家回合、未摸牌、非mustDiscard，且不是「手牌空+台數<8必須摸牌」情形
+  const handEmpty0 = G.playerHand.length===0 && calcHuWithHand(G.playerHand,G.playerMelds)<8;
+  const canGiveUp = G.turn==='player' && !G.mustDiscard && !G.hasDrawn && !handEmpty0;
+  document.getElementById('giveUpBtn').classList.toggle('off',!canGiveUp);
   const meldBtn=document.getElementById('meldBtn');
   meldBtn.style.display=(_selectedForMeld.length>=2&&G.turn==='player'&&!G.mustDiscard)?'block':'none';
   const cancelSelBtn=document.getElementById('cancelSelBtn');
@@ -1541,7 +1546,11 @@ function selectCard(i){
 
   if(_selectedForMeld.includes(i)){
     if(_selectedForMeld.length === 1){
-      // 單選再點同一張 → 出牌
+      // 單選再點同一張 → 出牌（需先摸牌或吃/碰後）
+      if(!G.hasDrawn){
+        toast('⚠️ 請先摸牌或放棄，才能出牌');
+        return;
+      }
       _selectedForMeld = [];
       G.selectedIdx = -1;
       playCard(i);
@@ -1616,6 +1625,24 @@ function discardCard(i){
   G.turn='cpu';         // 先設回合再 render，防止胡牌按鈕瞬閃
   save();render();
   toast(`打出：${COLOR_NAME[card.color]}${card.suit}`);
+  setTimeout(()=>cpuCheckEat(),700);
+}
+
+/* ── Give Up ── */
+function playerGiveUp(){
+  if(G.turn!=='player'||!G.active||G.mustDiscard||G.hasDrawn) return;
+  // 手牌空且台數未達8，強制摸牌，不能放棄
+  if(G.playerHand.length===0 && calcHuWithHand(G.playerHand,G.playerMelds)<8){
+    toast('⚠️ 手牌空且台數不足，必須摸牌');
+    return;
+  }
+  resetTugTimer();
+  _selectedForMeld=[];
+  G.selectedIdx=-1;
+  G.turn='cpu';
+  G.hasDrawn=false;
+  save();render();
+  toast('👋 玩家放棄，換電腦出牌');
   setTimeout(()=>cpuCheckEat(),700);
 }
 
