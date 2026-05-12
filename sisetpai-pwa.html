@@ -391,7 +391,7 @@ let deferredPrompt;
 let _installReady = false;
 function _refreshInstallBtn(){
   const btn=document.getElementById('installBtn');
-  if(btn) btn.style.display=(_installReady&&!document.getElementById('home').classList.contains('hidden'))?'flex':'none';
+  if(btn) btn.style.display=(!document.getElementById('home').classList.contains('hidden'))?'flex':'none';
 }
 window.addEventListener('beforeinstallprompt', e=>{
   e.preventDefault();
@@ -1062,6 +1062,7 @@ let G = {
   eatCandidates:[],   // indices in playerHand that form meld with topCard
   eatMeldType:null,
   hasDrawn:false,
+  drewFromEmpty:false,
   mustDiscard:false,
   pScore:0, cScore:0,
   active:false,
@@ -1086,7 +1087,7 @@ function startGameActual(scene,pattern){
   G.playerHand=[];G.cpuHand=[];
   G.playerMelds=[];G.cpuMelds=[];
   G.topCard=null;G.turn='player';G.phase='play';
-  G.selectedIdx=-1;G.hasDrawn=false;G.mustDiscard=false;G.active=true;
+  G.selectedIdx=-1;G.hasDrawn=false;G.drewFromEmpty=false;G.mustDiscard=false;G.active=true;
   G.scene=scene||'default'; G.cardPattern=pattern||'none';
   // Deal 18 cards each
   for(let i=0;i<18;i++){G.playerHand.push(G.deck.pop());G.cpuHand.push(G.deck.pop());}
@@ -1286,9 +1287,10 @@ function render(){
   badge.classList.toggle('player-turn', G.turn==='player');
   const phEnabled = G.turn==='player' && !G.mustDiscard && !G.hasDrawn;
   document.getElementById('drawBtn').classList.toggle('off',!phEnabled);
-  // 放棄按鈕：玩家回合、未摸牌、非mustDiscard，且不是「手牌空+台數<8必須摸牌」情形
+  // 放棄按鈕：未摸牌 OR（手牌空後才摸牌的drewFromEmpty狀態），且非mustDiscard
   const handEmpty0 = G.playerHand.length===0 && calcHuWithHand(G.playerHand,G.playerMelds)<8;
-  const canGiveUp = G.turn==='player' && !G.mustDiscard && !G.hasDrawn && !handEmpty0;
+  const canGiveUp = G.turn==='player' && !G.mustDiscard
+                    && (!G.hasDrawn || G.drewFromEmpty) && !handEmpty0;
   document.getElementById('giveUpBtn').classList.toggle('off',!canGiveUp);
   const meldBtn=document.getElementById('meldBtn');
   meldBtn.style.display=(_selectedForMeld.length>=2&&G.turn==='player'&&!G.mustDiscard)?'block':'none';
@@ -1606,7 +1608,7 @@ function playCard(i){
   const card=G.playerHand[i];
   G.playerHand.splice(i,1);
   G.topCard=card;
-  G.selectedIdx=-1; _selectedForMeld=[]; G.hasDrawn=false;
+  G.selectedIdx=-1; _selectedForMeld=[]; G.hasDrawn=false; G.drewFromEmpty=false;
   sortHand(G.playerHand);
   save(); render();
   toast(`出牌：${COLOR_NAME[card.color]}${card.suit}`);
@@ -1630,15 +1632,18 @@ function discardCard(i){
 
 /* ── Give Up ── */
 function playerGiveUp(){
-  if(G.turn!=='player'||!G.active||G.mustDiscard||G.hasDrawn) return;
-  // 手牌空且台數未達8，強制摸牌，不能放棄
-  if(G.playerHand.length===0 && calcHuWithHand(G.playerHand,G.playerMelds)<8){
-    toast('⚠️ 手牌空且台數不足，必須摸牌');
+  if(G.turn!=='player'||!G.active||G.mustDiscard) return;
+  // 已摸牌但非「手牌空後摸牌」→ 不能放棄
+  if(G.hasDrawn && !G.drewFromEmpty){toast('⚠️ 已摸牌，請出牌或組合');return;}
+  // 手牌空且台數未達8，強制摸牌後才能放棄
+  if(!G.hasDrawn && G.playerHand.length===0 && calcHuWithHand(G.playerHand,G.playerMelds)<8){
+    toast('⚠️ 手牌空且台數不足，請先摸牌');
     return;
   }
   resetTugTimer();
   _selectedForMeld=[];
   G.selectedIdx=-1;
+  G.drewFromEmpty=false;
   G.turn='cpu';
   G.hasDrawn=false;
   save();render();
@@ -1652,6 +1657,7 @@ function playerDraw(){
   if(G.hasDrawn){toast('本回合已摸牌');return;}
   resetTugTimer();
   if(G.deck.length===0){toast('牌堆已空！');return;}
+  if(G.playerHand.length===0) G.drewFromEmpty=true;
   const c=G.deck.pop();
   G.playerHand.push(c);
   G.hasDrawn=true;
@@ -1926,7 +1932,7 @@ function cpuCheckEat(){
         toast(`🤖 電腦吃牌，打出：${COLOR_NAME[disc.color]}${disc.suit}`);
       }
       if(checkWin(G.cpuHand, G.cpuMelds)){ cpuWins(); return; }
-      G.turn='player'; G.hasDrawn=false;
+      G.turn='player'; G.hasDrawn=false; G.drewFromEmpty=false;
       save(); render();
       notifyPlayer('👤','換你了！','可摸牌、出牌或吃牌');
       // Check if player can eat CPU's discard
@@ -1970,7 +1976,7 @@ function cpuTurn(){
     if(G.cpuHand.length === 0 && checkWin(G.cpuHand, G.cpuMelds)){ cpuWins(); return; }
     if(G.cpuHand.length === 0){
       // ✅ 死鎖修復：手牌空但未達胡數 → 正常交還玩家回合
-      G.turn='player'; G.hasDrawn=false;
+      G.turn='player'; G.hasDrawn=false; G.drewFromEmpty=false;
       save(); render();
       toast('👤 輪到玩家出牌');
       return;
@@ -1981,7 +1987,7 @@ function cpuTurn(){
     toast(`🤖 電腦出牌：${COLOR_NAME[disc.color]}${disc.suit}`);
 
     if(checkWin(G.cpuHand, G.cpuMelds)){ cpuWins(); return; }
-    G.turn='player'; G.hasDrawn=false;
+    G.turn='player'; G.hasDrawn=false; G.drewFromEmpty=false;
     save(); render();
     notifyPlayer('👤','換你了！','可摸牌、出牌或吃牌');
 
