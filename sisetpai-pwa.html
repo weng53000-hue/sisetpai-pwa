@@ -1,0 +1,2006 @@
+<!--
+  四色牌遊戲 (Four Color Cards Game)
+  © 2026 彬程工作室 (Bin Cheng Studio) & 翁榮彬 (Rong-Bin Weng)
+  All Rights Reserved.
+  未經授權嚴禁複製、修改、散佈或商業使用。
+-->
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="四色牌">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1a5c1a">
+<meta name="application-name" content="四色牌">
+<link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,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">
+<link rel="apple-touch-icon" sizes="152x152" href="data:image/png;base64,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">
+<link rel="apple-touch-icon" sizes="167x167" href="data:image/png;base64,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">
+<link rel="icon" type="image/png" sizes="192x192" href="data:image/png;base64,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">
+<link rel="icon" type="image/png" sizes="512x512" href="data:image/png;base64,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">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>四色牌</title>
+<style>
+/* 使用微軟正黑體 */
+
+:root {
+  --green:#2d8c2d; --green-dk:#1a5c1a;
+  --white-bg:#f5f0e8;
+  --red:#d4520a; --red-dk:#a33c06;
+  --yellow:#c9a200; --yellow-dk:#9a7800;
+  --gold:#c9a84c;
+  --felt:#1a5c1a; --felt-dk:#0f3d0f;
+  --wood:#5C3317; --wood-lt:#8B5E3C;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;font-family:'Microsoft JhengHei','微軟正黑體','Heiti TC','黑體-繁',sans-serif;background:#0d0702;user-select:none;}
+
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .35s,transform .35s;}
+.screen.hidden{opacity:0;pointer-events:none;transform:scale(.96);}
+
+/* ══ HOME ══ */
+#home{background:radial-gradient(ellipse at center,#2a1505,#0d0702);}
+.wood-frame{position:absolute;inset:0;border:14px solid var(--wood);box-shadow:inset 0 0 50px rgba(0,0,0,.6),0 0 0 3px var(--gold);pointer-events:none;z-index:2;}
+.felt-layer{position:absolute;inset:18px;background:radial-gradient(ellipse,#1e6b1e,var(--felt-dk));border-radius:10px;box-shadow:inset 0 0 60px rgba(0,0,0,.5);}
+.felt-grid{position:absolute;inset:18px;border-radius:10px;background-image:repeating-linear-gradient(45deg,transparent,transparent 10px,rgba(0,0,0,.04) 10px,rgba(0,0,0,.04) 11px);}
+
+.home-inner{position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;gap:18px;}
+.logo{font-family:'Microsoft JhengHei','微軟正黑體','Heiti TC','黑體-繁',sans-serif;font-weight:900;font-size:74px;color:var(--gold);text-shadow:0 0 24px rgba(201,168,76,.5),3px 3px 0 rgba(0,0,0,.5);letter-spacing:8px;line-height:1;}
+.logo-row{display:flex;gap:5px;margin-top:-4px;}
+.lc{width:30px;height:42px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;box-shadow:0 2px 6px rgba(0,0,0,.4);border:1.5px solid rgba(255,255,255,.25);}
+.lc.g{background:var(--green);color:#fff;}
+.lc.w{background:var(--white-bg);color:#222;border-color:#aaa;}
+.lc.r{background:var(--red);color:#fff;}
+.lc.y{background:#d4ac0d;color:#fff;}
+.home-sub{font-size:12px;color:rgba(201,168,76,.65);letter-spacing:3px;}
+
+.mbtn{width:215px;padding:15px 0;border:none;border-radius:8px;font-family:'Microsoft JhengHei','微軟正黑體','Heiti TC','黑體-繁',sans-serif;font-weight:900;font-size:26px;letter-spacing:4px;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.45);transition:transform .15s;}
+.mbtn:active{transform:scale(.95);}
+.btn-new{background:linear-gradient(135deg,#2d7a2d,#1a5c1a);color:#fff;border:2px solid rgba(255,255,255,.2);}
+.btn-cont{background:linear-gradient(135deg,var(--wood-lt),var(--wood));color:var(--gold);border:2px solid rgba(201,168,76,.3);}
+.btn-rules{background:transparent;color:rgba(201,168,76,.65);border:1px solid rgba(201,168,76,.35);font-size:18px;width:165px;padding:11px 0;}
+
+/* ══ GAME ══ */
+#game{background:radial-gradient(ellipse,#1e6b1e,#0a2d0a);padding:0;}
+.table-grid{position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,transparent,transparent 13px,rgba(0,0,0,.035) 13px,rgba(0,0,0,.035) 14px);}
+
+.gtop{position:absolute;top:0;left:0;right:0;height:50px;background:linear-gradient(180deg,rgba(0,0,0,.72),transparent);display:flex;align-items:center;justify-content:space-between;padding:0 14px;z-index:100;}
+.gbk{background:none;border:none;color:var(--gold);font-size:22px;cursor:pointer;padding:8px;}
+.scores{display:flex;gap:18px;}
+.sc{display:flex;flex-direction:column;align-items:center;color:#fff;font-size:10px;line-height:1.2;}
+.sc b{font-size:20px;color:var(--gold);}
+
+/* CPU */
+.cpu-zone{position:absolute;top:50px;left:0;right:0;min-height:100px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:4px 0;}
+.zone-lbl{font-size:10px;color:rgba(255,255,255,.55);letter-spacing:2px;}
+.cpu-hand{display:flex;justify-content:center;flex-wrap:nowrap;overflow:hidden;padding:0 4px;}
+.cback{width:26px;height:38px;border-radius:4px;background:linear-gradient(135deg,var(--wood-lt),var(--wood));border:1.5px solid rgba(201,168,76,.35);margin-left:-8px;box-shadow:2px 2px 5px rgba(0,0,0,.4);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Microsoft JhengHei','微軟正黑體','Heiti TC','黑體-繁',sans-serif;font-weight:900;font-size:10px;color:rgba(201,168,76,.28);}
+.cback:first-child{margin-left:0;}
+.cpu-melds{display:flex;flex-wrap:wrap;justify-content:center;gap:3px;padding:2px 6px;max-width:100%;}
+
+/* Draw pile */
+.draw-pile{position:absolute;left:8px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;z-index:10;}
+.dstack{width:40px;height:56px;position:relative;}
+.dcard{position:absolute;width:40px;height:56px;border-radius:5px;background:linear-gradient(135deg,var(--wood-lt),var(--wood));border:1.5px solid rgba(201,168,76,.4);box-shadow:2px 2px 5px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;font-family:'Microsoft JhengHei','微軟正黑體','Heiti TC','黑體-繁',sans-serif;font-weight:900;font-size:14px;color:rgba(201,168,76,.35);}
+.dcard:nth-child(1){top:-3px;left:-2px;}
+.dcard:nth-child(2){top:-1.5px;left:-1px;}
+.dcard:nth-child(3){top:0;left:0;}
+.dcnt{font-size:10px;color:rgba(255,255,255,.5);}
+
+/* Center */
+.center-area{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:7px;z-index:10;}
+.turn-badge{font-size:12px;font-weight:700;background:rgba(0,0,0,.55);border-radius:20px;padding:5px 16px;letter-spacing:1px;border:1px solid rgba(255,255,255,.15);transition:color .3s,border-color .3s;}
+.turn-badge.player-turn{border-color:rgba(255,220,100,.5);animation:badgePulse 1.5s ease-in-out infinite;}
+@keyframes badgePulse{0%,100%{box-shadow:0 0 0 0 rgba(255,220,100,0);}50%{box-shadow:0 0 0 6px rgba(255,220,100,.2);}}
+.play-zone{width:112px;height:72px;border:2px dashed rgba(255,255,255,.2);border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.top-card{width:52px;height:70px;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.55);border:2px solid rgba(255,255,255,.3);animation:cplay .2s ease;}
+@keyframes cplay{from{transform:scale(.7) translateY(-14px);opacity:0;}to{transform:scale(1);opacity:1;}}
+.tc-suit{font-size:22px;font-weight:900;line-height:1;}
+.tc-clr{font-size:10px;opacity:.75;margin-top:2px;}
+.color-req{font-size:10px;color:rgba(255,255,255,.6);display:flex;align-items:center;gap:5px;}
+.req-dot{width:11px;height:11px;border-radius:50%;border:1.5px solid rgba(255,255,255,.4);}
+
+/* Player melds (right side) */
+.player-melds{position:absolute;right:6px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:3px;align-items:flex-end;}
+
+/* Meld mini cards */
+.meld-grp{display:flex;gap:1px;}
+.mc{width:18px;height:26px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;border:1px solid rgba(255,255,255,.2);box-shadow:0 1px 3px rgba(0,0,0,.3);}
+
+/* Player zone */
+.pzone{position:absolute;bottom:0;left:0;right:0;padding-bottom:12px;}
+.pinfo{display:flex;justify-content:center;align-items:center;gap:8px;margin-bottom:4px;}
+.pname{font-size:11px;color:rgba(255,255,255,.8);background:rgba(0,0,0,.35);border-radius:20px;padding:3px 12px;}
+.hu-count-badge{font-size:10px;color:rgba(255,255,255,.6);background:rgba(0,0,0,.3);border-radius:20px;padding:2px 8px;}
+/* 胡牌按鈕 - 大型醒目設計 */
+.hu-btn{
+  display:none;
+  background:linear-gradient(135deg,#f0d060,#c9a010,#f0d060);
+  background-size:200% auto;
+  color:#1a0900;
+  border:3px solid rgba(255,255,255,.6);
+  border-radius:32px;
+  font-family:'Microsoft JhengHei','微軟正黑體','Heiti TC','黑體-繁',sans-serif;
+  font-weight:900;
+  font-size:26px;
+  padding:10px 32px;
+  cursor:pointer;
+  letter-spacing:4px;
+  position:relative;
+  overflow:hidden;
+  animation:huGlow .6s infinite alternate, huShimmer 2s linear infinite;
+}
+@keyframes huGlow{
+  from{box-shadow:0 0 10px rgba(240,208,96,.4), 0 4px 16px rgba(0,0,0,.5);}
+  to{box-shadow:0 0 28px rgba(240,208,96,.9), 0 4px 24px rgba(0,0,0,.5), 0 0 60px rgba(201,168,76,.4);}
+}
+@keyframes huShimmer{
+  0%{background-position:0% center;}
+  100%{background-position:200% center;}
+}
+.hu-btn::before{
+  content:'';position:absolute;top:-50%;left:-60%;
+  width:40%;height:200%;
+  background:rgba(255,255,255,.25);
+  transform:skewX(-20deg);
+  animation:huSweep 2s infinite;
+}
+@keyframes huSweep{0%{left:-60%;}100%{left:160%;}}
+.hu-btn.show{display:inline-block;}
+.hu-btn:active{transform:scale(.92);}
+
+.phand{display:flex;justify-content:center;overflow-x:auto;padding:6px 8px 0;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.phand::-webkit-scrollbar{display:none;}
+.pcard{width:46px;height:64px;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px solid rgba(255,255,255,.3);cursor:pointer;flex-shrink:0;margin-left:-11px;box-shadow:0 4px 10px rgba(0,0,0,.4);transition:transform .15s,box-shadow .15s,border-color .15s;position:relative;}
+.pcard:first-child{margin-left:0;}
+.pcard.sel{transform:translateY(-18px);box-shadow:0 12px 22px rgba(0,0,0,.55);border-color:#fff;z-index:20;}
+.pcard .cs{font-size:18px;font-weight:900;line-height:1;}
+.pcard .cc{font-size:9px;opacity:.75;margin-top:1px;}
+
+.clr-g{background:linear-gradient(135deg,var(--green),var(--green-dk));color:#fff;}
+.clr-w{background:linear-gradient(135deg,#f5f0e8,#ddd6c0);color:#222;border-color:#bbb!important;}
+.clr-r{background:linear-gradient(135deg,var(--red),var(--red-dk));color:#fff;}
+.clr-y{background:linear-gradient(135deg,#d4ac0d,var(--yellow-dk));color:#fff;}
+
+/* ══ SCENE OVERRIDES ══ */
+body.sc-sports #game{background:#2A7B1A;}
+body.sc-sports .table-grid{background-image:radial-gradient(circle at 50% 50%,transparent 68px,rgba(255,255,255,.3) 68px,rgba(255,255,255,.3) 72px,transparent 72px),linear-gradient(transparent 49%,rgba(255,255,255,.3) 49%,rgba(255,255,255,.3) 51%,transparent 51%),repeating-linear-gradient(0deg,transparent,transparent 34px,rgba(0,0,0,.04) 34px,rgba(0,0,0,.04) 68px);}
+body.sc-sports .clr-g{background:linear-gradient(135deg,#00BF40,#007828)!important;}
+body.sc-sports .clr-w{background:linear-gradient(135deg,#E3F2FD,#90CAF9)!important;color:#0D5B8A!important;border-color:#64B5F6!important;}
+body.sc-sports .clr-r{background:linear-gradient(135deg,#FF5722,#C63A0A)!important;}
+body.sc-sports .clr-y{background:linear-gradient(135deg,#FFD600,#E6AC00)!important;}
+body.sc-sports .cback{background:linear-gradient(135deg,#388E3C,#1B5E20)!important;color:rgba(144,238,144,.3)!important;border-color:rgba(144,238,144,.35)!important;}
+body.sc-sports .dcard{background:linear-gradient(135deg,#388E3C,#1B5E20)!important;color:rgba(144,238,144,.3)!important;}
+body.sc-toilet #game{background:#CACACA;}
+body.sc-toilet .table-grid{background-image:linear-gradient(rgba(255,255,255,.55) 2px,transparent 2px),linear-gradient(90deg,rgba(255,255,255,.55) 2px,transparent 2px);background-size:38px 38px;}
+body.sc-toilet .clr-g{background:linear-gradient(135deg,#607D8B,#37474F)!important;}
+body.sc-toilet .clr-w{background:linear-gradient(135deg,#FAFAFA,#E0E0E0)!important;color:#555!important;border-color:#aaa!important;}
+body.sc-toilet .clr-r{background:linear-gradient(135deg,#78909C,#546E7A)!important;}
+body.sc-toilet .clr-y{background:linear-gradient(135deg,#90A4AE,#607D8B)!important;}
+body.sc-toilet .cback{background:linear-gradient(135deg,#78909C,#546E7A)!important;color:rgba(255,255,255,.2)!important;border-color:rgba(255,255,255,.25)!important;}
+body.sc-toilet .dcard{background:linear-gradient(135deg,#78909C,#546E7A)!important;color:rgba(255,255,255,.2)!important;}
+body.sc-kochikame #game{background:linear-gradient(180deg,#4a2800,#7a4a1a 50%,#4a2800);}
+body.sc-kochikame .table-grid{background-image:repeating-linear-gradient(90deg,transparent,transparent 44px,rgba(0,0,0,.06) 44px,rgba(0,0,0,.06) 45px),repeating-linear-gradient(0deg,transparent,transparent 22px,rgba(0,0,0,.04) 22px,rgba(0,0,0,.04) 23px);}
+body.sc-kochikame .clr-g{background:linear-gradient(135deg,#1565C0,#0D47A1)!important;}
+body.sc-kochikame .clr-w{background:linear-gradient(135deg,#E8EAF6,#C5CAE9)!important;color:#1A237E!important;border-color:#9FA8DA!important;}
+body.sc-kochikame .clr-r{background:linear-gradient(135deg,#C62828,#B71C1C)!important;}
+body.sc-kochikame .clr-y{background:linear-gradient(135deg,#F9A825,#E65100)!important;}
+body.sc-kochikame .cback{background:linear-gradient(135deg,#1A237E,#283593)!important;color:rgba(180,190,255,.2)!important;border-color:rgba(180,190,255,.25)!important;}
+body.sc-kochikame .dcard{background:linear-gradient(135deg,#1A237E,#283593)!important;color:rgba(180,190,255,.2)!important;}
+body.pat-zebra .cback{background:repeating-linear-gradient(45deg,#fff 0,#fff 4px,#111 4px,#111 8px)!important;color:transparent!important;border-color:#555!important;}
+body.pat-zebra .dcard{background:repeating-linear-gradient(45deg,#fff 0,#fff 4px,#111 4px,#111 8px)!important;color:transparent!important;}
+.scene-deco{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1;}
+/* Card icons */
+.ci{font-size:13px;line-height:1;margin-bottom:2px;display:flex;align-items:center;justify-content:center;}
+.ci svg{width:15px;height:15px;display:block;}
+.top-card .ci{font-size:16px;margin-bottom:3px;}
+.top-card .ci svg{width:18px;height:18px;}
+/* ══ SETUP SCREEN ══ */
+#setupScreen{background:rgba(5,15,5,.97);}
+.setup-panel{position:relative;z-index:10;background:rgba(15,35,15,.92);border:2px solid rgba(201,168,76,.4);border-radius:16px;padding:22px 18px;width:min(92vw,400px);max-height:88vh;overflow-y:auto;display:flex;flex-direction:column;gap:16px;}
+.setup-title{text-align:center;font-size:20px;font-weight:900;color:var(--gold);letter-spacing:4px;}
+.setup-section{display:flex;flex-direction:column;gap:8px;}
+.setup-label{font-size:11px;color:rgba(201,168,76,.8);letter-spacing:2px;}
+.setup-scene-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+.scene-btn{border:2px solid rgba(255,255,255,.18);border-radius:10px;background:rgba(255,255,255,.05);color:rgba(255,255,255,.85);font-family:inherit;font-size:11px;font-weight:700;padding:0;cursor:pointer;overflow:hidden;display:flex;flex-direction:column;transition:border-color .2s,background .2s;}
+.scene-btn.active{border-color:var(--gold);background:rgba(201,168,76,.15);}
+.scene-btn span{padding:5px 0 6px;display:block;}
+.scene-preview{width:100%;height:50px;}
+.sp-default{background:radial-gradient(ellipse,#1e6b1e,#0a2d0a);}
+.sp-sports{background:#2A7B1A;background-image:radial-gradient(circle at 50% 50%,transparent 18px,rgba(255,255,255,.45) 18px,rgba(255,255,255,.45) 20px,transparent 20px),linear-gradient(transparent 48%,rgba(255,255,255,.45) 48%,rgba(255,255,255,.45) 52%,transparent 52%);}
+.sp-toilet{background:#CACACA;background-image:linear-gradient(rgba(255,255,255,.5) 2px,transparent 2px),linear-gradient(90deg,rgba(255,255,255,.5) 2px,transparent 2px);background-size:18px 18px;}
+.sp-kochikame{background:linear-gradient(180deg,#4a2800,#8a5a20);}
+.setup-pattern-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+.pat-btn{border:2px solid rgba(255,255,255,.18);border-radius:8px;background:rgba(255,255,255,.05);color:rgba(255,255,255,.85);font-family:inherit;font-size:10px;font-weight:700;padding:8px 4px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;transition:border-color .2s,background .2s;}
+.pat-btn.active{border-color:var(--gold);background:rgba(201,168,76,.15);}
+.pat-ico{font-size:22px;line-height:1;}
+.setup-start-btn{background:linear-gradient(135deg,#2d7a2d,#1a5c1a);color:#fff;border:2px solid rgba(255,255,255,.2);border-radius:10px;font-family:inherit;font-size:18px;font-weight:900;padding:14px 0;cursor:pointer;letter-spacing:3px;transition:transform .15s;}
+.setup-start-btn:active{transform:scale(.95);}
+.setup-back-btn{background:none;border:none;color:rgba(201,168,76,.7);font-family:inherit;font-size:13px;cursor:pointer;padding:4px 0;letter-spacing:1px;}
+.setup-back-btn:hover{color:var(--gold);}
+
+/* Action */
+.action-bar{position:absolute;bottom:148px;left:8px;display:flex;flex-direction:column;gap:6px;}
+.abtn{background:rgba(0,0,0,.58);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:8px;font-family:'Microsoft JhengHei','微軟正黑體','Heiti TC','黑體-繁',sans-serif;font-weight:900;font-size:15px;padding:7px 10px;cursor:pointer;letter-spacing:1px;backdrop-filter:blur(4px);}
+.abtn:active{background:rgba(255,255,255,.15);}
+.abtn.off{opacity:.4;pointer-events:none;}
+#cancelSelBtn{background:rgba(180,40,40,.55);border-color:rgba(255,100,100,.5);color:#ffd0d0;}
+
+/* Eat prompt */
+.eat-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:flex-end;justify-content:center;padding-bottom:172px;z-index:150;}
+.eat-overlay.hidden{display:none;}
+.eat-box{background:#162416;border:2px solid var(--gold);border-radius:14px;padding:16px 20px;text-align:center;width:86vw;max-width:300px;}
+.eat-title{font-family:'Microsoft JhengHei','微軟正黑體','Heiti TC','黑體-繁',sans-serif;font-weight:900;font-size:22px;color:var(--gold);margin-bottom:6px;}
+.eat-preview{display:flex;justify-content:center;gap:4px;margin:8px 0;}
+.eat-msg{font-size:12px;color:rgba(255,255,255,.7);margin-bottom:12px;line-height:1.6;}
+.eat-btns{display:flex;gap:10px;justify-content:center;}
+.ebtn{padding:10px 22px;border:none;border-radius:8px;font-family:'Microsoft JhengHei','微軟正黑體','Heiti TC','黑體-繁',sans-serif;font-weight:900;font-size:20px;cursor:pointer;letter-spacing:2px;}
+.ebtn.yes{background:var(--green);color:#fff;}
+.ebtn.no{background:rgba(255,255,255,.1);color:rgba(255,255,255,.65);border:1px solid rgba(255,255,255,.2);}
+.ebtn:active{transform:scale(.93);}
+
+/* Discard hint */
+.discard-hint{position:fixed;bottom:135px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.82);border:1px solid var(--gold);border-radius:10px;padding:7px 16px;font-size:12px;color:var(--gold);z-index:130;pointer-events:none;white-space:nowrap;}
+.discard-hint.hidden{display:none;}
+
+/* Thinking */
+.thinking{display:flex;gap:5px;justify-content:center;padding:4px;}
+.dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.4);animation:bnc .8s infinite;}
+.dot:nth-child(2){animation-delay:.15s;}.dot:nth-child(3){animation-delay:.3s;}
+@keyframes bnc{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);background:var(--gold);}}
+.thinking.hidden{display:none;}
+
+/* ── 錘子叫醒按鈕 ── */
+.hammer-btn{
+  display:none;align-items:center;gap:5px;
+  background:rgba(201,168,76,.18);
+  border:1.5px solid rgba(201,168,76,.55);
+  color:var(--gold);border-radius:20px;
+  padding:5px 14px;font-family:'Microsoft JhengHei','微軟正黑體',sans-serif;
+  font-size:13px;font-weight:900;cursor:pointer;letter-spacing:1px;
+  backdrop-filter:blur(4px);
+}
+.hammer-btn .hico{font-size:18px;display:inline-block;animation:hamSwing .45s ease-in-out infinite alternate;}
+.hammer-btn.show{display:inline-flex;}
+.hammer-btn:active{transform:scale(.9);}
+@keyframes hamSwing{from{transform:rotate(-25deg);}to{transform:rotate(20deg);}}
+
+/* ══ RULES ══ */
+#rules{background:radial-gradient(ellipse,#2a1505,#0d0702);justify-content:flex-start;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.rules-wrap{width:100%;padding:0 14px 30px;}
+.rules-hdr{display:flex;align-items:center;gap:10px;padding:10px 0 14px;position:sticky;top:0;background:rgba(13,7,2,.94);z-index:10;}
+.rules-hdr span{font-family:'Microsoft JhengHei','微軟正黑體','Heiti TC','黑體-繁',sans-serif;font-weight:900;font-size:22px;color:var(--gold);}
+.rsec{background:rgba(255,255,255,.04);border:1px solid rgba(201,168,76,.2);border-radius:12px;padding:14px;margin-bottom:12px;}
+.rsec h3{font-family:'Microsoft JhengHei','微軟正黑體','Heiti TC','黑體-繁',sans-serif;font-weight:900;font-size:20px;color:var(--gold);margin-bottom:10px;}
+.rsec p{font-size:12.5px;color:rgba(255,255,255,.75);line-height:1.85;margin-bottom:5px;}
+.rsec .note{font-size:11.5px;color:rgba(255,180,80,.8);margin-top:6px;}
+
+/* Rule cards row */
+.card-row{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin:6px 0;}
+.rcard{width:34px;height:46px;border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1.5px solid rgba(255,255,255,.3);box-shadow:0 2px 6px rgba(0,0,0,.4);flex-shrink:0;}
+.rcard .rs{font-size:16px;font-weight:900;line-height:1;}
+.rcard .rc{font-size:9px;opacity:.7;margin-top:1px;}
+.rcard.big{width:40px;height:54px;}
+.rcard.big .rs{font-size:19px;}
+.plus{color:rgba(255,255,255,.5);font-size:16px;margin:0 2px;}
+.arrow{color:rgba(255,255,255,.4);font-size:14px;margin:0 3px;}
+.hu-label{font-size:11px;color:#4fc3f7;font-weight:700;margin-left:4px;white-space:nowrap;}
+
+.combo-block{background:rgba(0,0,0,.25);border-radius:8px;padding:10px;margin:8px 0;}
+.combo-title{font-size:11px;color:rgba(201,168,76,.8);margin-bottom:6px;letter-spacing:1px;}
+
+.chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;}
+.chip{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;}
+
+/* Table of suits */
+.suit-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;}
+.suit-table td,.suit-table th{padding:5px 6px;text-align:center;border:1px solid rgba(255,255,255,.1);}
+.suit-table th{color:var(--gold);font-size:11px;}
+
+/* ══ MODAL ══ */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);display:flex;align-items:center;justify-content:center;z-index:300;backdrop-filter:blur(3px);}
+.overlay.hidden{display:none;}
+.mbox{background:linear-gradient(135deg,#2a1a08,#1a0e05);border:2px solid var(--gold);border-radius:16px;padding:28px 24px;text-align:center;width:82vw;max-width:310px;box-shadow:0 20px 60px rgba(0,0,0,.8);}
+.mt{font-family:'Microsoft JhengHei','微軟正黑體','Heiti TC','黑體-繁',sans-serif;font-weight:900;font-size:34px;color:var(--gold);margin-bottom:10px;}
+.mm{color:rgba(255,255,255,.8);font-size:13px;line-height:1.75;margin-bottom:20px;white-space:pre-line;}
+.mbtns{display:flex;flex-direction:column;gap:8px;}
+.mbtn2{padding:12px 0;border:none;border-radius:8px;font-family:'Microsoft JhengHei','微軟正黑體','Heiti TC','黑體-繁',sans-serif;font-weight:900;font-size:21px;letter-spacing:3px;cursor:pointer;transition:transform .15s;}
+.mbtn2:active{transform:scale(.95);}
+.mbtn2.p{background:var(--green);color:#fff;}
+.mbtn2.s{background:rgba(255,255,255,.09);color:rgba(255,255,255,.65);border:1px solid rgba(255,255,255,.2);font-size:15px;}
+.mbtn2.d{background:#C62828;color:#fff;font-size:15px;}
+@keyframes wPop{0%{transform:scale(.5);opacity:0;}60%{transform:scale(1.08);}100%{transform:scale(1);opacity:1;}}
+.win-anim{animation:wPop .4s ease forwards;}
+
+/* Toast */
+.toast{position:fixed;top:56px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.9);color:#fff;padding:9px 18px;border-radius:20px;font-size:13px;z-index:400;border:1px solid rgba(201,168,76,.45);transition:opacity .3s;white-space:nowrap;pointer-events:none;}
+.toast.hidden{opacity:0;}
+
+/* ── Player turn notify ── */
+.notify-overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:250;pointer-events:none;}
+.notify-overlay.hidden{display:none;}
+.notify-card{
+  background:linear-gradient(135deg,#1a3a1a,#0d220d);
+  border:2px solid var(--gold);border-radius:16px;
+  padding:20px 32px;text-align:center;
+  box-shadow:0 8px 40px rgba(0,0,0,.8);
+  animation:notifyPop .3s ease;
+  pointer-events:none;
+}
+@keyframes notifyPop{from{transform:scale(.7);opacity:0;}to{transform:scale(1);opacity:1;}}
+.notify-icon{font-size:36px;margin-bottom:6px;}
+.notify-title{font-family:'Microsoft JhengHei','微軟正黑體','Heiti TC','黑體-繁',sans-serif;font-weight:900;font-size:28px;color:var(--gold);letter-spacing:3px;margin-bottom:4px;}
+.notify-sub{font-size:13px;color:rgba(255,255,255,.7);letter-spacing:1px;}
+
+/* ── Install button ── */
+#installBtn{display:none;position:fixed;bottom:20px;right:16px;z-index:500;background:linear-gradient(135deg,#c9a84c,#a07820);color:#1a0e05;border:none;border-radius:28px;padding:10px 18px;font-family:'Microsoft JhengHei','微軟正黑體',sans-serif;font-weight:900;font-size:14px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.5);align-items:center;gap:8px;letter-spacing:1px;animation:installPulse 2s infinite;}
+@keyframes installPulse{0%,100%{box-shadow:0 4px 16px rgba(0,0,0,.5);}50%{box-shadow:0 4px 24px rgba(201,168,76,.6);}}
+#installBtn:active{transform:scale(.95);}
+#iosHint{display:none;position:fixed;bottom:0;left:0;right:0;background:#1a3a1a;border-top:2px solid #c9a84c;padding:16px 20px 32px;font-family:'Microsoft JhengHei','微軟正黑體',sans-serif;font-size:13px;color:#fff;z-index:600;text-align:center;}
+
+</style>
+<script>
+(function(){
+  const m="{\"name\": \"四色牌\", \"short_name\": \"四色牌\", \"description\": \"台灣傳統四色牌桌遊\", \"start_url\": \".\", \"display\": \"standalone\", \"orientation\": \"portrait\", \"background_color\": \"#0d0702\", \"theme_color\": \"#1a5c1a\", \"lang\": \"zh-TW\", \"icons\": [{\"src\": \"data:image/png;base64,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\", \"sizes\": \"192x192\", \"type\": \"image/png\"}, {\"src\": \"data:image/png;base64,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\", \"sizes\": \"512x512\", \"type\": \"image/png\"}]}";
+  const blob=new Blob([m],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const link=document.createElement('link');
+  link.rel='manifest';link.href=url;
+  document.head.appendChild(link);
+})();
+</script>
+<script>
+if('serviceWorker' in navigator){
+  const swBlob = new Blob(["const CACHE='sipai-v1';\nself.addEventListener('install',e=>{self.skipWaiting();});\nself.addEventListener('activate',e=>{self.clients.claim();});\nself.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).catch(()=>new Response('offline')));});"], {type:'application/javascript'});
+  const swURL = URL.createObjectURL(swBlob);
+  navigator.serviceWorker.register(swURL).then(()=>console.log('SW registered')).catch(()=>{});
+}
+// PWA install prompt
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', e=>{
+  e.preventDefault();
+  deferredPrompt=e;
+  document.getElementById('installBtn').style.display='flex';
+});
+window.addEventListener('appinstalled',()=>{
+  document.getElementById('installBtn').style.display='none';
+});
+function installApp(){
+  if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.choose().then(()=>{deferredPrompt=null;});}
+  else{
+    alert('安裝方式：\n📱 iOS Safari：點右下角分享按鈕 → 加入主畫面\n🤖 Android Chrome：點右上角選單 → 安裝應用程式');
+  }
+}
+</script>
+</head>
+<body>
+
+<button id="installBtn" onclick="installApp()">⬇ 安裝 App</button>
+<div id="iosHint">
+  <div style="color:#c9a84c;font-size:16px;font-weight:900;margin-bottom:8px">📱 安裝到主畫面</div>
+  <div style="line-height:1.8">
+    <b>iPhone / iPad：</b>Safari 底部點「<b>分享</b>」圖示 → 選「<b>加入主畫面</b>」<br>
+    <b>Android：</b>Chrome 右上角「⋮」→「<b>安裝應用程式</b>」
+  </div>
+  <button onclick="document.getElementById('iosHint').style.display='none'" style="margin-top:12px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:20px;padding:6px 20px;font-size:14px;cursor:pointer">關閉</button>
+</div>
+
+
+<!-- ══ SETUP SCREEN ══ -->
+<div id="setupScreen" class="screen hidden">
+  <div class="wood-frame"></div>
+  <div class="setup-panel">
+    <div class="setup-title">🃏 新遊戲設定</div>
+    <div class="setup-section">
+      <div class="setup-label">🏟️ 選擇場景</div>
+      <div class="setup-scene-grid">
+        <button class="scene-btn active" data-scene="default" onclick="selectScene('default')">
+          <div class="scene-preview sp-default"></div><span>🀄 原有場景</span>
+        </button>
+        <button class="scene-btn" data-scene="sports" onclick="selectScene('sports')">
+          <div class="scene-preview sp-sports"></div><span>⚽ 運動場</span>
+        </button>
+        <button class="scene-btn" data-scene="toilet" onclick="selectScene('toilet')">
+          <div class="scene-preview sp-toilet"></div><span>🚽 廁所</span>
+        </button>
+        <button class="scene-btn" data-scene="kochikame" onclick="selectScene('kochikame')">
+          <div class="scene-preview sp-kochikame"></div><span>👮 烏龍派出所</span>
+        </button>
+      </div>
+    </div>
+    <div class="setup-section">
+      <div class="setup-label">🎨 牌子圖樣</div>
+      <div class="setup-pattern-grid">
+        <button class="pat-btn active" data-pat="none" onclick="selectPattern('none')">
+          <span class="pat-ico">⬜</span><span>無圖樣</span>
+        </button>
+        <button class="pat-btn" data-pat="kochikame" onclick="selectPattern('kochikame')">
+          <span class="pat-ico">👮</span><span>烏龍派出所</span>
+        </button>
+        <button class="pat-btn" data-pat="zebra" onclick="selectPattern('zebra')">
+          <span class="pat-ico">🦓</span><span>斑馬黑白</span>
+        </button>
+        <button class="pat-btn" data-pat="animals" onclick="selectPattern('animals')">
+          <span class="pat-ico">🐾</span><span>動物</span>
+        </button>
+        <button class="pat-btn" data-pat="pikmin" onclick="selectPattern('pikmin')">
+          <span class="pat-ico">🌱</span><span>皮克敏</span>
+        </button>
+        <button class="pat-btn" data-pat="pawpatrol" onclick="selectPattern('pawpatrol')">
+          <span class="pat-ico">🐕</span><span>汪汪隊</span>
+        </button>
+      </div>
+    </div>
+    <button class="setup-start-btn" onclick="confirmSetup()">🀄 開始遊戲</button>
+    <button class="setup-back-btn" onclick="show('home')">← 返回主頁</button>
+  </div>
+</div>
+
+<!-- ══ HOME ══ -->
+<div id="home" class="screen">
+  <div class="wood-frame"></div>
+  <div class="felt-layer"></div>
+  <div class="felt-grid"></div>
+  <div class="home-inner">
+    <div class="logo">四色牌</div>
+    <div class="logo-row">
+      <div class="lc g">將</div><div class="lc w">士</div>
+      <div class="lc r">帥</div><div class="lc y">車</div>
+      <div class="lc g">馬</div><div class="lc r">包</div><div class="lc y">卒</div>
+    </div>
+    <div class="home-sub">台灣人必學的傳統桌遊</div>
+    <button class="mbtn btn-new" onclick="showSetup()">新遊戲</button>
+    <button class="mbtn btn-cont" id="contBtn" style="display:none" onclick="loadGame()">繼續遊戲</button>
+    <button class="mbtn btn-rules" onclick="show('rules')">玩法規則</button>
+  </div>
+</div>
+
+<!-- ══ GAME ══ -->
+<div id="game" class="screen hidden">
+  <div class="table-grid"></div>
+  <div id="sceneDeco" class="scene-deco"></div>
+  <div class="gtop">
+    <button class="gbk" onclick="pauseGame()">⬅</button>
+    <div class="scores">
+      <div class="sc"><b id="pScore">0</b>玩家勝</div>
+      <div class="sc"><b id="cScore">0</b>電腦勝</div>
+    </div>
+    <div style="width:36px"></div>
+  </div>
+
+  <div class="cpu-zone">
+    <div class="zone-lbl">電腦 · 已胡 <span id="cpuHuN">0</span></div>
+    <div class="cpu-melds" id="cpuMelds"></div>
+    <div class="cpu-hand" id="cpuHand"></div>
+    <div class="thinking hidden" id="thinking"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+    <button class="hammer-btn" id="hammerBtn" onclick="wakeUpCpu()">
+      <span class="hico">🔨</span>敲醒電腦
+    </button>
+  </div>
+
+  <div class="draw-pile" onclick="playerDraw()">
+    <div class="dstack"><div class="dcard">牌</div><div class="dcard">牌</div><div class="dcard">牌</div></div>
+    <div class="dcnt" id="deckCnt">牌堆</div>
+  </div>
+
+  <div class="center-area">
+    <div class="turn-badge" id="turnBadge">👤 玩家回合</div>
+    <div class="play-zone" id="playZone"><span style="color:rgba(255,255,255,.25);font-size:12px">出牌區</span></div>
+    <div class="color-req" id="colorReq"></div>
+  </div>
+
+  <div class="player-melds" id="playerMelds"></div>
+
+  <div class="action-bar">
+    <button class="abtn" id="drawBtn" onclick="playerDraw()">摸牌</button>
+    <button class="abtn" id="cancelSelBtn" onclick="cancelSelection()" style="display:none;">取消</button>
+    <button class="abtn" id="meldBtn" onclick="tryFormMeld()" style="display:none;background:rgba(201,168,76,.25);border-color:rgba(201,168,76,.5);">組合</button>
+  </div>
+
+  <div class="pzone">
+    <div class="pinfo">
+      <span class="pname">👤 玩家</span>
+      <span class="hu-count-badge">已胡 <b id="playerHuN">0</b></span>
+    </div>
+    <!-- 胡牌按鈕：獨立置中，條件滿足才顯示 -->
+    <div id="huBtnWrap" style="display:flex;justify-content:center;margin-bottom:6px;min-height:0;transition:min-height .3s;">
+      <button class="hu-btn" id="huBtn" onclick="declareHu()">🀄 胡牌！</button>
+    </div>
+    <div class="phand" id="playerHand"></div>
+  </div>
+</div>
+
+<!-- ══ EAT OVERLAY ══ -->
+<div class="eat-overlay hidden" id="eatOverlay">
+  <div class="eat-box">
+    <div class="eat-title" id="eatTitle">吃牌？</div>
+    <div class="eat-preview" id="eatPreview"></div>
+    <div class="eat-msg" id="eatMsg">你手中有配對，要吃這張牌嗎？</div>
+    <div class="eat-btns">
+      <button class="ebtn yes" onclick="doEat()">吃！</button>
+      <button class="ebtn no" onclick="skipEat()">不吃</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ PLAYER TURN NOTIFY ══ -->
+<div class="notify-overlay hidden" id="notifyOverlay">
+  <div class="notify-card" id="notifyCard">
+    <div class="notify-icon" id="notifyIcon">👤</div>
+    <div class="notify-title" id="notifyTitle">換你了！</div>
+    <div class="notify-sub" id="notifySub">請摸牌或出牌</div>
+  </div>
+</div>
+
+<div class="discard-hint hidden" id="discardHint">吃牌後請打出一張牌</div>
+
+<!-- ══ RULES ══ -->
+<div id="rules" class="screen hidden" style="align-items:flex-start;">
+<div class="rules-wrap">
+  <div class="rules-hdr">
+    <button class="gbk" onclick="show('home')">⬅</button>
+    <span>速解四色牌玩法</span>
+  </div>
+
+  <!-- 認識四色牌 -->
+  <div class="rsec">
+    <h3>🎴 認識四色牌</h3>
+    <p><b style="color:var(--gold);font-size:18px">112</b> 張 — 四色牌全部張數</p>
+    <p>4 種顏色 × 7 種字牌 × 4 張 = 112 張</p>
+    <table class="suit-table">
+      <tr><th>顏色</th><th colspan="7">字牌</th></tr>
+      <tr>
+        <td><span class="chip clr-g" style="font-size:10px">綠</span></td>
+        <td>將</td><td>士</td><td>象</td><td>車</td><td>馬</td><td>包</td><td>卒</td>
+      </tr>
+      <tr>
+        <td><span class="chip clr-w" style="font-size:10px;border:1px solid #aaa;color:#222">白</span></td>
+        <td>將</td><td>士</td><td>象</td><td>車</td><td>馬</td><td>包</td><td>卒</td>
+      </tr>
+      <tr>
+        <td><span class="chip clr-r" style="font-size:10px">紅(橘)</span></td>
+        <td>帥</td><td>仕</td><td>相</td><td>俥</td><td>傌</td><td>炮</td><td>兵</td>
+      </tr>
+      <tr>
+        <td><span class="chip clr-y" style="font-size:10px">黃</span></td>
+        <td>帥</td><td>仕</td><td>相</td><td>俥</td><td>傌</td><td>炮</td><td>兵</td>
+      </tr>
+    </table>
+    <p class="note">※ 紅色說法上稱「紅」，實際牌是橘色。綠白兩色用象棋「將」方字，紅黃兩色用「帥」方字。</p>
+    <div class="chips" style="margin-top:10px">
+      <span class="chip clr-g">綠</span>
+      <span class="chip clr-w" style="border:1px solid #aaa;color:#222">白</span>
+      <span class="chip clr-r">紅(橘)</span>
+      <span class="chip clr-y">黃</span>
+    </div>
+    <p style="margin-top:8px">牌的外觀是直式長牌，上半是大字，下半是小字（鏡像）</p>
+    <div class="card-row" style="margin-top:6px">
+      <div class="rcard clr-r big"><span class="rs">帥</span><span class="rc" style="font-size:7px">帥↕</span></div>
+      <div class="rcard clr-y big"><span class="rs">仕</span><span class="rc" style="font-size:7px">仕↕</span></div>
+      <div class="rcard clr-g big"><span class="rs">象</span><span class="rc" style="font-size:7px">象↕</span></div>
+      <div class="rcard clr-r big"><span class="rs">俥</span><span class="rc" style="font-size:7px">俥↕</span></div>
+      <div class="rcard clr-w big"><span class="rs">馬</span><span class="rc" style="font-size:7px">馬↕</span></div>
+      <div class="rcard clr-g big"><span class="rs">包</span><span class="rc" style="font-size:7px">包↕</span></div>
+      <div class="rcard clr-y big"><span class="rs">兵</span><span class="rc" style="font-size:7px">兵↕</span></div>
+    </div>
+  </div>
+
+  <!-- 遊戲玩法與目標 -->
+  <div class="rsec">
+    <h3>🎯 遊戲玩法與目標</h3>
+    <p><b style="color:var(--gold);font-size:22px">18</b> 張 ｜ 每個玩家都會拿到 18 張牌</p>
+    <p><b style="color:var(--gold);">+1</b> 張 ｜ 自己或其他玩家翻牌打牌時，會形成暫時的 19 張牌</p>
+    <p><b style="color:var(--gold);font-size:22px">8</b> 胡 ｜ 所有牌組合成至少 8 胡即胡牌</p>
+    <p class="note">※ 四色牌閩南語稱為「十胡仔」，因為早期玩法為組成 10 胡，現代則以 8 胡的玩法居多。</p>
+  </div>
+
+  <!-- 胡的組合方式一 -->
+  <div class="rsec">
+    <h3>🀄 胡的組合方式（一）</h3>
+    <p style="margin-bottom:2px"><b>明</b> = 公開吃對後完成的組合　<b>暗</b> = 拿到手牌後即完成組合</p>
+
+    <div class="combo-block">
+      <div class="combo-title">同色順子（將士象 / 帥仕相）→ 明暗2胡</div>
+      <div class="card-row">
+        <div class="rcard clr-w"><span class="rs">將</span></div>
+        <div class="rcard clr-w"><span class="rs">士</span></div>
+        <div class="rcard clr-w"><span class="rs">象</span></div>
+        <span class="hu-label">2胡</span>
+      </div>
+      <div class="card-row">
+        <div class="rcard clr-g"><span class="rs">將</span></div>
+        <div class="rcard clr-g"><span class="rs">士</span></div>
+        <div class="rcard clr-g"><span class="rs">象</span></div>
+        <span class="hu-label">2胡</span>
+      </div>
+    </div>
+
+    <div class="combo-block">
+      <div class="combo-title">同色順子（車馬包 / 俥傌炮）→ 明暗1胡</div>
+      <div class="card-row">
+        <div class="rcard clr-g"><span class="rs">車</span></div>
+        <div class="rcard clr-g"><span class="rs">馬</span></div>
+        <div class="rcard clr-g"><span class="rs">包</span></div>
+        <span class="hu-label">1胡</span>
+      </div>
+      <div class="card-row">
+        <div class="rcard clr-r"><span class="rs">俥</span></div>
+        <div class="rcard clr-r"><span class="rs">傌</span></div>
+        <div class="rcard clr-r"><span class="rs">炮</span></div>
+        <span class="hu-label">1胡</span>
+      </div>
+    </div>
+
+    <div class="combo-block">
+      <div class="combo-title">將帥單張 → 明暗1胡</div>
+      <div class="card-row">
+        <div class="rcard clr-w"><span class="rs">將</span></div>
+        <span class="hu-label">1胡</span>
+        <span style="color:rgba(255,255,255,.4);margin:0 8px">或</span>
+        <div class="rcard clr-r"><span class="rs">帥</span></div>
+        <span class="hu-label">1胡</span>
+      </div>
+    </div>
+
+    <div class="combo-block">
+      <div class="combo-title">同色將帥二張 → 明暗2胡</div>
+      <div class="card-row">
+        <div class="rcard clr-y"><span class="rs">帥</span></div>
+        <div class="rcard clr-y"><span class="rs">帥</span></div>
+        <span class="hu-label">2胡</span>
+      </div>
+    </div>
+
+    <div class="combo-block">
+      <div class="combo-title">同色同字二張（士象車馬包卒/兵）→ 明暗0胡（有效組合但不計胡）</div>
+      <div class="card-row">
+        <div class="rcard clr-r"><span class="rs">俥</span></div>
+        <div class="rcard clr-r"><span class="rs">俥</span></div>
+        <span class="hu-label" style="color:rgba(255,255,255,.5)">0胡（有效）</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 胡的組合方式二 -->
+  <div class="rsec">
+    <h3>🀄 胡的組合方式（二）</h3>
+
+    <div class="combo-block">
+      <div class="combo-title">同色將帥三張 → 暗6胡 / 明4胡</div>
+      <div class="card-row">
+        <div class="rcard clr-w"><span class="rs">將</span></div>
+        <div class="rcard clr-w"><span class="rs">將</span></div>
+        <div class="rcard clr-w"><span class="rs">將</span></div>
+        <span class="hu-label">暗6胡／明4胡</span>
+      </div>
+    </div>
+
+    <div class="combo-block">
+      <div class="combo-title">同色將帥四張 → 暗10胡 / 明8胡</div>
+      <div class="card-row">
+        <div class="rcard clr-g"><span class="rs">將</span></div>
+        <div class="rcard clr-g"><span class="rs">將</span></div>
+        <div class="rcard clr-g"><span class="rs">將</span></div>
+        <div class="rcard clr-g"><span class="rs">將</span></div>
+        <span class="hu-label">暗10胡／明8胡</span>
+      </div>
+    </div>
+
+    <div class="combo-block">
+      <div class="combo-title">同色同字三張（士象車馬包卒/兵）→ 暗3胡 / 明1胡</div>
+      <div class="card-row">
+        <div class="rcard clr-w"><span class="rs">車</span></div>
+        <div class="rcard clr-w"><span class="rs">車</span></div>
+        <div class="rcard clr-w"><span class="rs">車</span></div>
+        <span class="hu-label">暗3胡／明1胡</span>
+      </div>
+    </div>
+
+    <div class="combo-block">
+      <div class="combo-title">同色同字四張 → 暗8胡 / 明6胡</div>
+      <div class="card-row">
+        <div class="rcard clr-r"><span class="rs">俥</span></div>
+        <div class="rcard clr-r"><span class="rs">俥</span></div>
+        <div class="rcard clr-r"><span class="rs">俥</span></div>
+        <div class="rcard clr-r"><span class="rs">俥</span></div>
+        <span class="hu-label">暗8胡／明6胡</span>
+      </div>
+    </div>
+
+    <div class="combo-block">
+      <div class="combo-title">不同色兵卒三張 → 明暗3胡</div>
+      <div class="card-row">
+        <div class="rcard clr-w"><span class="rs">卒</span></div>
+        <div class="rcard clr-g"><span class="rs">卒</span></div>
+        <div class="rcard clr-r"><span class="rs">兵</span></div>
+        <span class="hu-label">3胡</span>
+      </div>
+    </div>
+
+    <div class="combo-block">
+      <div class="combo-title">不同色兵卒四張 → 明暗4胡</div>
+      <div class="card-row">
+        <div class="rcard clr-w"><span class="rs">卒</span></div>
+        <div class="rcard clr-g"><span class="rs">卒</span></div>
+        <div class="rcard clr-r"><span class="rs">兵</span></div>
+        <div class="rcard clr-y"><span class="rs">兵</span></div>
+        <span class="hu-label">4胡</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 吃牌 -->
+  <div class="rsec">
+    <h3>🍽️ 吃牌</h3>
+    <p>上家或自己翻牌或打牌之後，如果能與手牌完成組合，可以吃牌。<br>吃牌後要從手牌中再打掉一張牌。</p>
+
+    <div class="combo-block">
+      <div class="combo-title">吃牌範例</div>
+      <div class="card-row" style="align-items:center">
+        <div class="rcard clr-g"><span class="rs">車</span></div>
+        <div class="rcard clr-g"><span class="rs">馬</span></div>
+        <span class="plus">+</span>
+        <div class="rcard clr-g"><span class="rs">包</span></div>
+        <span class="arrow">→</span>
+        <div class="rcard clr-g"><span class="rs">車</span></div>
+        <div class="rcard clr-g"><span class="rs">馬</span></div>
+        <div class="rcard clr-g"><span class="rs">包</span></div>
+        <span class="hu-label">1胡</span>
+      </div>
+      <div class="card-row" style="align-items:center">
+        <div class="rcard clr-w"><span class="rs">將</span></div>
+        <div class="rcard clr-w"><span class="rs">象</span></div>
+        <span class="plus">+</span>
+        <div class="rcard clr-w"><span class="rs">士</span></div>
+        <span class="arrow">→</span>
+        <div class="rcard clr-w"><span class="rs">將</span></div>
+        <div class="rcard clr-w"><span class="rs">士</span></div>
+        <div class="rcard clr-w"><span class="rs">象</span></div>
+        <span class="hu-label">2胡</span>
+      </div>
+      <div class="card-row" style="align-items:center">
+        <div class="rcard clr-g"><span class="rs">卒</span></div>
+        <div class="rcard clr-w"><span class="rs">卒</span></div>
+        <span class="plus">+</span>
+        <div class="rcard clr-r"><span class="rs">兵</span></div>
+        <span class="arrow">→</span>
+        <div class="rcard clr-g"><span class="rs">卒</span></div>
+        <div class="rcard clr-w"><span class="rs">卒</span></div>
+        <div class="rcard clr-r"><span class="rs">兵</span></div>
+        <span class="hu-label">3胡</span>
+      </div>
+    </div>
+
+    <p class="note">※ 注意：<br>
+    1. 不能吃對家或下家翻出或打出的牌。<br>
+    2. 上家打出的將帥屬於他的有效組合，下家不可以吃。<br>
+    3. 如果自己手牌已經組成順子，基本上不可以再吃牌。</p>
+  </div>
+
+  <!-- 對牌 / 開牌 -->
+  <div class="rsec">
+    <h3>🔓 對牌 / 開牌</h3>
+    <p>任一家翻牌或打牌之後，如果能與手牌完成三或四張同色同字組合，可以對牌或開牌，並從手牌中再打掉一張牌。</p>
+
+    <div class="combo-block">
+      <div class="combo-title">對牌（三張同色同字）</div>
+      <div class="card-row" style="align-items:center">
+        <div class="rcard clr-g"><span class="rs">象</span></div>
+        <div class="rcard clr-g"><span class="rs">象</span></div>
+        <span class="plus">+</span>
+        <div class="rcard clr-g"><span class="rs">象</span></div>
+        <span class="arrow">→</span>
+        <div class="rcard clr-g"><span class="rs">象</span></div>
+        <div class="rcard clr-g"><span class="rs">象</span></div>
+        <div class="rcard clr-g"><span class="rs">象</span></div>
+        <span class="hu-label">1胡</span>
+      </div>
+      <div class="card-row" style="align-items:center">
+        <div class="rcard clr-w"><span class="rs">將</span></div>
+        <div class="rcard clr-w"><span class="rs">將</span></div>
+        <span class="plus">+</span>
+        <div class="rcard clr-w"><span class="rs">將</span></div>
+        <span class="arrow">→</span>
+        <div class="rcard clr-w"><span class="rs">將</span></div>
+        <div class="rcard clr-w"><span class="rs">將</span></div>
+        <div class="rcard clr-w"><span class="rs">將</span></div>
+        <span class="hu-label">4胡</span>
+      </div>
+    </div>
+
+    <div class="combo-block">
+      <div class="combo-title">開牌（四張同色同字）</div>
+      <div class="card-row" style="align-items:center">
+        <div class="rcard clr-r"><span class="rs">兵</span></div>
+        <div class="rcard clr-r"><span class="rs">兵</span></div>
+        <div class="rcard clr-r"><span class="rs">兵</span></div>
+        <span class="plus">+</span>
+        <div class="rcard clr-r"><span class="rs">兵</span></div>
+        <span class="arrow">→</span>
+        <div class="rcard clr-r"><span class="rs">兵</span></div>
+        <div class="rcard clr-r"><span class="rs">兵</span></div>
+        <div class="rcard clr-r"><span class="rs">兵</span></div>
+        <div class="rcard clr-r"><span class="rs">兵</span></div>
+        <span class="hu-label">6胡</span>
+      </div>
+    </div>
+
+    <p class="note">※ 注意：<br>
+    1. 對牌和開牌的順位大於吃牌，也就是吃牌要讓給對牌和開牌。<br>
+    2. 開牌是強制性的，不是選擇性的。如果沒開被抓算輸（被包）。<br>
+    3. 手牌 車車車馬包，只能組成 車車車／馬包，車來必須開不能吃（大肚）。</p>
+  </div>
+
+  <!-- 遊戲流程 -->
+  <div class="rsec">
+    <h3>🎮 遊戲流程</h3>
+    <p><b>1.</b> 洗牌搓牌，由莊家發牌。發牌共三輪。<br>
+    　第一輪莊家發 7 張，其他家 6 張，<br>
+    　第二輪和第三輪各發 6 張（莊家 19、其他 18）</p>
+    <p style="color:rgba(255,150,100,.8)">　※ 牌不能放進手裡！翻牌才能看。</p>
+
+    <p style="margin-top:8px"><b>2.</b> 莊家打牌後，每個玩家輪流<b style="color:#f06">公開翻牌</b>。<br>
+    　每次翻牌後各家決定開牌、對牌、吃牌。<br>
+    　（自己翻到將帥牌若無吃對牌也必須打牌）</p>
+
+    <p style="margin-top:8px"><b>3.</b> 每位玩家都盡力完成 8 胡以上並讓組合完整，<br>
+    　直到翻或打出來的牌讓人胡牌，遊戲結束。</p>
+
+    <div class="combo-block" style="margin-top:10px">
+      <div class="combo-title">胡牌範例（8胡）</div>
+      <div class="card-row" style="flex-wrap:wrap;gap:3px">
+        <div class="rcard clr-g"><span class="rs">將</span></div>
+        <div class="rcard clr-g"><span class="rs">士</span></div>
+        <div class="rcard clr-g"><span class="rs">象</span></div>
+        <div class="rcard clr-w"><span class="rs">象</span></div>
+        <div class="rcard clr-w"><span class="rs">象</span></div>
+        <div class="rcard clr-w"><span class="rs">象</span></div>
+        <div class="rcard clr-y"><span class="rs">帥</span></div>
+        <div class="rcard clr-g"><span class="rs">馬</span></div>
+        <div class="rcard clr-g"><span class="rs">馬</span></div>
+        <div class="rcard clr-g"><span class="rs">馬</span></div>
+      </div>
+      <div class="card-row" style="flex-wrap:wrap;gap:3px;margin-top:3px">
+        <div class="rcard clr-r"><span class="rs">俥</span></div>
+        <div class="rcard clr-r"><span class="rs">傌</span></div>
+        <div class="rcard clr-r"><span class="rs">炮</span></div>
+        <div class="rcard clr-g"><span class="rs">卒</span></div>
+        <div class="rcard clr-w"><span class="rs">卒</span></div>
+        <div class="rcard clr-r"><span class="rs">兵</span></div>
+        <div class="rcard clr-r"><span class="rs">俥</span></div>
+        <div class="rcard clr-r"><span class="rs">俥</span></div>
+      </div>
+      <p style="margin-top:6px;font-size:11px;color:rgba(255,220,100,.8)">胡牌：＋1張綠馬 → 完成！</p>
+    </div>
+  </div>
+
+  <!-- 好玩在哪裡 -->
+  <div class="rsec">
+    <h3>✨ 四色牌好玩在哪裡</h3>
+    <p>四色牌有趣之處在於<b style="color:var(--gold)">牌組非常靈活</b>。一張、二張、三張、四張，都是有效組合。</p>
+    <p>聽牌方式非常多元，而且遊戲進行速度快，適合娛樂消遣打發時間，小賭怡情也很不錯。</p>
+    <p style="margin-top:8px">舉例來說，下面的牌組<b style="color:#4fc3f7">可以聽的牌數多達 8 種</b>，而且實際上還有聽更多種牌的情境。腦筋需要不斷轉動才能應付牌局的變化。</p>
+
+    <div class="combo-block" style="margin-top:8px">
+      <div class="combo-title">聽牌範例</div>
+      <div class="card-row" style="flex-wrap:wrap;gap:3px">
+        <div class="rcard clr-g"><span class="rs">將</span></div>
+        <div class="rcard clr-g"><span class="rs">士</span></div>
+        <div class="rcard clr-g"><span class="rs">象</span></div>
+        <div class="rcard clr-w"><span class="rs">象</span></div>
+        <div class="rcard clr-w"><span class="rs">象</span></div>
+        <div class="rcard clr-w"><span class="rs">象</span></div>
+        <div class="rcard clr-r"><span class="rs">帥</span></div>
+        <div class="rcard clr-g"><span class="rs">馬</span></div>
+        <div class="rcard clr-g"><span class="rs">馬</span></div>
+        <div class="rcard clr-g"><span class="rs">馬</span></div>
+      </div>
+      <div class="card-row" style="flex-wrap:wrap;gap:3px;margin-top:3px">
+        <div class="rcard clr-r"><span class="rs">俥</span></div>
+        <div class="rcard clr-r"><span class="rs">傌</span></div>
+        <div class="rcard clr-r"><span class="rs">炮</span></div>
+        <div class="rcard clr-g"><span class="rs">卒</span></div>
+        <div class="rcard clr-w"><span class="rs">卒</span></div>
+        <div class="rcard clr-r"><span class="rs">兵</span></div>
+        <div class="rcard clr-r"><span class="rs">俥</span></div>
+        <div class="rcard clr-r"><span class="rs">俥</span></div>
+      </div>
+      <div style="margin-top:10px;padding:8px;background:rgba(79,195,247,.1);border:1px solid rgba(79,195,247,.3);border-radius:8px;">
+        <p style="color:#4fc3f7;font-size:11px;margin-bottom:6px">可聽之牌（翻出或打出任一張即可胡）：</p>
+        <div class="card-row" style="flex-wrap:wrap;gap:3px">
+          <div class="rcard clr-g"><span class="rs">將</span></div>
+          <div class="rcard clr-w"><span class="rs">將</span></div>
+          <div class="rcard clr-r"><span class="rs">帥</span></div>
+          <div class="rcard clr-r"><span class="rs">帥</span></div>
+          <div class="rcard clr-g"><span class="rs">象</span></div>
+          <div class="rcard clr-g"><span class="rs">馬</span></div>
+          <div class="rcard clr-r"><span class="rs">俥</span></div>
+          <div class="rcard clr-r"><span class="rs">兵</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rsec" style="text-align:center">
+    <p style="color:var(--gold);font-size:14px">四色牌是華人精緻桌遊</p>
+    <p style="margin-top:6px">各地各家的四色牌玩法都有些許出入，算胡方式也不盡相同。</p>
+    <p style="margin-top:6px;color:rgba(255,180,80,.8)">初學者拿牌手抽筋屬於正常現象 😄</p>
+  </div>
+
+  <div style="height:16px"></div>
+
+  <!-- ══ 版權聲明 ══ -->
+  <div class="rsec" style="border:1px solid rgba(201,168,76,.3);background:rgba(0,0,0,.35);border-radius:10px;padding:16px 18px;">
+    <h3 style="color:var(--gold);font-size:16px;margin-bottom:10px;letter-spacing:1px">© 版權聲明 Copyright Notice</h3>
+    <table style="width:100%;font-size:13px;line-height:2;color:rgba(255,255,255,.85);border-collapse:collapse;">
+      <tr><td style="color:rgba(201,168,76,.8);white-space:nowrap;padding-right:12px">專案名稱</td><td>四色牌遊戲 (Four Color Cards Game)</td></tr>
+      <tr><td style="color:rgba(201,168,76,.8);white-space:nowrap;padding-right:12px">版權所有</td><td>彬程工作室 (Bin Cheng Studio)</td></tr>
+      <tr><td style="color:rgba(201,168,76,.8);white-space:nowrap;padding-right:12px">版本編號</td><td>v1.0.0</td></tr>
+      <tr><td style="color:rgba(201,168,76,.8);white-space:nowrap;padding-right:12px">發布日期</td><td>2026年5月12日</td></tr>
+    </table>
+    <div style="margin-top:12px;font-size:12px;line-height:1.9;color:rgba(255,255,255,.7);">
+      <p><b style="color:rgba(255,255,255,.9)">著作權保護：</b>本程式之原始碼、美術資產、音效及遊戲邏輯均受著作權法保護。未經版權所有者書面授權，嚴禁以任何形式進行複製、修改、散佈或用於商業用途。</p>
+      <p style="margin-top:6px"><b style="color:rgba(255,255,255,.9)">禁止行為：</b>嚴禁對本軟體進行逆向工程 (Reverse Engineering)、反編譯 (Decompilation) 或反組譯 (Disassembly)。</p>
+      <p style="margin-top:6px"><b style="color:rgba(255,255,255,.9)">免責聲明：</b>本軟體按「現狀」提供，開發者不對程式執行中的特定結果或因使用本軟體產生的任何損失承擔法律責任。</p>
+      <p style="margin-top:6px"><b style="color:rgba(255,255,255,.9)">侵權必究：</b>凡未經授權盜用、改作或冒名發布者，彬程工作室將保留法律追訴權。</p>
+    </div>
+    <p style="margin-top:14px;text-align:center;font-size:12px;color:rgba(201,168,76,.7);border-top:1px solid rgba(201,168,76,.2);padding-top:10px;">
+      © 2026 彬程工作室 (Bin Cheng Studio). All Rights Reserved. | Version: 2026.05.12<br>
+      <span style="color:rgba(255,255,255,.5)">本軟體受著作權法保護，未經許可嚴禁盜用、轉載或進行任何商業行為。</span>
+    </p>
+  </div>
+
+  <div style="height:16px"></div>
+</div>
+</div>
+
+<!-- ══ MODAL ══ -->
+<div class="overlay hidden" id="modal">
+  <div class="mbox" id="mbox">
+    <div class="mt" id="mt"></div>
+    <div class="mm" id="mm"></div>
+    <div class="mbtns" id="mbtns"></div>
+  </div>
+</div>
+
+<div class="toast hidden" id="toast"></div>
+
+<script>
+/* ══════════════════════════════════════
+   REAL FOUR COLOR CARD RULES IMPLEMENTATION
+   4 colours × 7 suits × 4 copies = 112 cards
+   ══════════════════════════════════════ */
+
+// Green/White use: 將士象車馬包卒
+// Red(orange)/Yellow use: 帥仕相俥傌炮兵
+const SUITS_GW = ['將','士','象','車','馬','包','卒'];
+const SUITS_RY = ['帥','仕','相','俥','傌','炮','兵'];
+const COLORS = ['g','w','r','y'];
+const COLOR_NAME = {g:'綠',w:'白',r:'紅',y:'黃'};
+const COLOR_HEX = {g:'#2d8c2d',w:'#e8e0d0',r:'#d4520a',y:'#d4ac0d'};
+
+// Suit groups for win checking
+const SHUN_HIGH = {g:['將','士','象'],w:['將','士','象'],r:['帥','仕','相'],y:['帥','仕','相']}; // 2hu
+const SHUN_LOW  = {g:['車','馬','包'],w:['車','馬','包'],r:['俥','傌','炮'],y:['俥','傌','炮']}; // 1hu
+const JIANG = {g:'將',w:'將',r:'帥',y:'帥'};
+const BING  = {g:'卒',w:'卒',r:'兵',y:'兵'};
+
+function suitsFor(color){ return (color==='g'||color==='w') ? SUITS_GW : SUITS_RY; }
+
+function createDeck(){
+  const deck=[];
+  for(const c of COLORS){
+    for(const s of suitsFor(c)){
+      for(let i=0;i<4;i++) deck.push({color:c,suit:s});
+    }
+  }
+  return shuffle(deck);
+}
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function cardKey(c){return c.color+'_'+c.suit;}
+
+/* ── State ── */
+let G = {
+  deck:[], playerHand:[], cpuHand:[],
+  playerMelds:[], cpuMelds:[],
+  topCard:null,
+  turn:'player',      // 'player' | 'cpu'
+  phase:'play',       // 'play' | 'eat' | 'discard'
+  selectedIdx:-1,
+  eatCandidates:[],   // indices in playerHand that form meld with topCard
+  eatMeldType:null,
+  hasDrawn:false,
+  mustDiscard:false,
+  pScore:0, cScore:0,
+  active:false,
+};
+
+/* ── Show screens ── */
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('hidden',s.id!==id));}
+
+/* ── New game ── */
+function startNew(){ showSetup(); }
+function startGameActual(scene,pattern){
+  G.deck=createDeck();
+  G.playerHand=[];G.cpuHand=[];
+  G.playerMelds=[];G.cpuMelds=[];
+  G.topCard=null;G.turn='player';G.phase='play';
+  G.selectedIdx=-1;G.hasDrawn=false;G.mustDiscard=false;G.active=true;
+  G.scene=scene||'default'; G.cardPattern=pattern||'none';
+  // Deal 18 cards each
+  for(let i=0;i<18;i++){G.playerHand.push(G.deck.pop());G.cpuHand.push(G.deck.pop());}
+  sortHand(G.playerHand);
+  // CPU auto-organizes obvious melds from initial hand
+  cpuTryFormMelds();
+  save(); show('game'); render();
+  setTimeout(()=>notifyPlayer('👤','遊戲開始！','你先出牌，或先摸牌再出牌'), 400);
+  toast('新遊戲開始！每人18張，湊8胡即可喊胡～');
+}
+
+function loadGame(){
+  const s=localStorage.getItem('scp2');
+  if(s){G=JSON.parse(s);G.active=true;applySceneClasses(G.scene||'default',G.cardPattern||'none');show('game');render();toast('繼續上次牌局');}
+}
+function save(){localStorage.setItem('scp2',JSON.stringify(G));document.getElementById('contBtn').style.display='block';}
+function pauseGame(){save();showModal('暫停',[{l:'繼續遊戲',c:'p',f:()=>{closeModal();show('game');}},{l:'回主頁',c:'s',f:()=>{closeModal();show('home');}},{l:'🗑️ 結束遊戲',c:'d',f:()=>endGame()}]);}
+function endGame(){
+  closeModal();
+  G.active=false;
+  localStorage.removeItem('scp2');
+  document.getElementById('contBtn').style.display='none';
+  applySceneClasses('default','none');
+  show('home');
+  toast('已結束本次牌局');
+}
+
+/* ── Sort hand ── */
+function sortHand(h){
+  h.sort((a,b)=>{
+    const ci=COLORS.indexOf(a.color)-COLORS.indexOf(b.color);
+    if(ci!==0)return ci;
+    return suitsFor(a.color).indexOf(a.suit)-suitsFor(b.color).indexOf(b.suit);
+  });
+}
+
+/* ── Player turn notification ── */
+let _notifyTimer = null;
+function notifyPlayer(icon, title, sub){
+  const ov = document.getElementById('notifyOverlay');
+  const ic = document.getElementById('notifyIcon');
+  const tt = document.getElementById('notifyTitle');
+  const sb = document.getElementById('notifySub');
+  ic.textContent = icon;
+  tt.textContent = title;
+  sb.textContent = sub;
+  ov.classList.remove('hidden');
+  clearTimeout(_notifyTimer);
+  _notifyTimer = setTimeout(()=> ov.classList.add('hidden'), 1800);
+}
+
+/* ── Try form meld button ── */
+function tryFormMeld(){
+  if(_selectedForMeld.length < 2){ toast('請先選取 2 張以上的牌才能組合'); return; }
+  const selCards = _selectedForMeld.map(x => G.playerHand[x]);
+  const t = meldTypeForMeld(selCards);
+  if(t.valid){
+    formPlayerMeld([..._selectedForMeld]);
+  } else {
+    toast('❌ 這幾張牌不能組合，請重新選取');
+    // 自動歸位：清空所有選取
+    _selectedForMeld = [];
+    G.selectedIdx = -1;
+    render();
+  }
+}
+
+// 嚴格版 meldType：至少 2 張才算有效組合（不允許單張）
+function meldTypeForMeld(cards){
+  if(cards.length < 2) return {valid:false, ming:0, label:'需至少2張'};
+  const t = meldType(cards);
+  // 2張的情況：只有同色將帥二張(2胡) 或 兵卒配對 才算有效
+  if(cards.length === 2){
+    const [a,b] = cards;
+    const isSameColorJiang = a.color===b.color && a.suit===b.suit && a.suit===JIANG[a.color];
+    const isBingPair = a.suit===BING[a.color] && b.suit===BING[b.color];
+    const isSameColorSame = a.color===b.color && a.suit===b.suit; // 同色同字二張（0胡有效）
+    if(isSameColorJiang || isBingPair || isSameColorSame){
+      return {valid:true, ming:t.ming, label:t.label};
+    }
+    return {valid:false, ming:0, label:'二張需同色同字或兵卒'};
+  }
+  // 3張以上：沿用 meldType 的結果，但必須是已知有效組合
+  const validLabels = ['兵卒三張','兵卒四張','順子高','順子低','將帥三張','將帥四張','同色同字三張','同色同字四張','同色將帥二張','同色同字0胡'];
+  if(validLabels.includes(t.label)){
+    return {valid:true, ming:t.ming, label:t.label};
+  }
+  return {valid:false, ming:0, label:'無效組合'};
+}
+
+/* ── Render ── */
+function render(){
+  renderCpu(); renderPlayer(); renderTopCard(); renderMelds();
+  document.getElementById('pScore').textContent=G.pScore;
+  document.getElementById('cScore').textContent=G.cScore;
+  document.getElementById('deckCnt').textContent=G.deck.length+'張';
+  // Dynamic turn badge
+  let badgeText, badgeColor;
+  if(G.turn==='player'){
+    if(G.mustDiscard){
+      badgeText='👤 吃牌後請打出一張';
+      badgeColor='rgba(255,160,60,.95)';
+    } else if(G.hasDrawn){
+      badgeText='👤 請出牌或組合';
+      badgeColor='rgba(255,220,100,.9)';
+    } else {
+      badgeText='👤 請摸牌或出牌';
+      badgeColor='rgba(255,220,100,.9)';
+    }
+  } else {
+    badgeText='🤖 電腦思考中...';
+    badgeColor='rgba(150,220,150,.9)';
+  }
+  const badge = document.getElementById('turnBadge');
+  badge.textContent=badgeText;
+  badge.style.color=badgeColor;
+  badge.classList.toggle('player-turn', G.turn==='player');
+  const phEnabled = G.turn==='player' && !G.mustDiscard && !G.hasDrawn;
+  document.getElementById('drawBtn').classList.toggle('off',!phEnabled);
+  const meldBtn=document.getElementById('meldBtn');
+  meldBtn.style.display=(_selectedForMeld.length>=2&&G.turn==='player'&&!G.mustDiscard)?'block':'none';
+  const cancelSelBtn=document.getElementById('cancelSelBtn');
+  cancelSelBtn.style.display=(_selectedForMeld.length>=1&&G.turn==='player')?'block':'none';
+  checkHuBtn();
+}
+
+function renderCpu(){
+  const el=document.getElementById('cpuHand');
+  el.innerHTML='';
+  const n=G.cpuHand.length;
+  for(let i=0;i<n;i++){
+    const d=document.createElement('div');
+    d.className='cback';
+    if(i>0)d.style.marginLeft=n>16?'-12px':'-8px';
+    d.textContent='牌';
+    el.appendChild(d);
+  }
+}
+
+function renderPlayer(){
+  const el=document.getElementById('playerHand');
+  el.innerHTML='';
+  G.playerHand.forEach((c,i)=>{
+    const inMeld=_selectedForMeld.includes(i);
+    const isSel=G.selectedIdx===i;
+    const d=document.createElement('div');
+    d.className=`pcard clr-${c.color}${isSel||inMeld?' sel':''}`;
+    if(inMeld&&!isSel) d.style.borderColor='rgba(255,220,100,.8)';
+    d.innerHTML=`${getCardIconHTML(c.suit)}<span class="cs">${c.suit}</span><span class="cc">${COLOR_NAME[c.color]}</span>`;
+    d.onclick=()=>selectCard(i);
+    el.appendChild(d);
+  });
+}
+
+function renderTopCard(){
+  const el=document.getElementById('playZone');
+  if(!G.topCard){el.innerHTML='<span style="color:rgba(255,255,255,.25);font-size:12px">出牌區</span>';document.getElementById('colorReq').innerHTML='';return;}
+  const c=G.topCard;
+  el.innerHTML=`<div class="top-card clr-${c.color}">${getCardIconHTML(c.suit)}<span class="tc-suit">${c.suit}</span><span class="tc-clr">${COLOR_NAME[c.color]}</span></div>`;
+  document.getElementById('colorReq').innerHTML=
+    `<div class="req-dot" style="background:${COLOR_HEX[c.color]}"></div><span>${COLOR_NAME[c.color]}色 ${c.suit}</span>`;
+}
+
+function renderMelds(){
+  // Player melds (right side)
+  const pm=document.getElementById('playerMelds');
+  pm.innerHTML='';
+  G.playerMelds.forEach(m=>{
+    const row=document.createElement('div');row.className='meld-grp';
+    m.forEach(c=>{
+      const mc=document.createElement('div');
+      mc.className=`mc clr-${c.color}`;mc.textContent=c.suit;
+      row.appendChild(mc);
+    });
+    pm.appendChild(row);
+  });
+  document.getElementById('playerHuN').textContent=calcHuWithHand(G.playerHand, G.playerMelds);
+
+  // CPU melds
+  const cm=document.getElementById('cpuMelds');
+  cm.innerHTML='';
+  G.cpuMelds.forEach(m=>{
+    const row=document.createElement('div');row.className='meld-grp';
+    m.forEach(c=>{
+      const mc=document.createElement('div');
+      mc.className=`mc clr-${c.color}`;mc.textContent=c.suit;
+      row.appendChild(mc);
+    });
+    cm.appendChild(row);
+  });
+  document.getElementById('cpuHuN').textContent=calcHu(G.cpuMelds);
+}
+
+/* ── Hu calculation ── */
+function calcHu(melds){
+  let hu=0;
+  for(const m of melds){
+    const t=meldType(m);
+    hu+=t.ming; // simplified: count ming value
+  }
+  return hu;
+}
+
+function meldType(cards){
+  if(cards.length===1){
+    const c=cards[0];
+    if(c.suit===JIANG[c.color]) return {ming:1,an:1,label:'將帥單張'};
+    return {ming:0,an:0,label:'單張'};
+  }
+  if(cards.length===2){
+    const [a,b]=cards;
+    if(a.color===b.color && a.suit===b.suit && a.suit===JIANG[a.color]) return {ming:2,an:2,label:'同色將帥二張'};
+    if(a.color===b.color && a.suit===b.suit) return {ming:0,an:0,label:'同色同字0胡'};
+    return {ming:0,an:0,label:'無效'};
+  }
+  if(cards.length===3){
+    const [a,b,c2]=cards;
+    // 不同色兵卒
+    const suits=cards.map(x=>x.suit);
+    const isBing=cards.every(x=>x.suit===BING[x.color]);
+    if(isBing) return {ming:3,an:3,label:'兵卒三張'};
+    // same color
+    if(a.color===b.color&&b.color===c2.color){
+      const col=a.color;
+      if(SHUN_HIGH[col]&&suits.sort().join()===SHUN_HIGH[col].slice().sort().join()) return {ming:2,an:2,label:'順子高'};
+      if(SHUN_LOW[col]&&suits.sort().join()===SHUN_LOW[col].slice().sort().join()) return {ming:1,an:1,label:'順子低'};
+      if(a.suit===b.suit&&b.suit===c2.suit&&a.suit===JIANG[col]) return {ming:4,an:6,label:'將帥三張'};
+      if(a.suit===b.suit&&b.suit===c2.suit) return {ming:1,an:3,label:'同色同字三張'};
+    }
+    return {ming:0,an:0,label:'無效'};
+  }
+  if(cards.length===4){
+    const [a,b,c2,d]=cards;
+    const isBing4=cards.every(x=>x.suit===BING[x.color]);
+    if(isBing4) return {ming:4,an:4,label:'兵卒四張'};
+    if(a.color===b.color&&b.color===c2.color&&c2.color===d.color){
+      const col=a.color;
+      if(a.suit===b.suit&&b.suit===c2.suit&&c2.suit===d.suit&&a.suit===JIANG[col]) return {ming:8,an:10,label:'將帥四張'};
+      if(a.suit===b.suit&&b.suit===c2.suit&&c2.suit===d.suit) return {ming:6,an:8,label:'同色同字四張'};
+    }
+    return {ming:0,an:0,label:'無效'};
+  }
+  return {ming:0,an:0,label:'?'};
+}
+
+function totalHu(melds){
+  return melds.reduce((s,m)=>s+meldType(m).ming,0);
+}
+
+// 判斷一張牌是否為將/帥
+function isJiang(card){ return card.suit === JIANG[card.color]; }
+
+// 計算含手中將/帥單牌的總胡數（每張未成組的將/帥算 1 胡）
+function calcHuWithHand(hand, melds){
+  let hu = totalHu(melds);
+  hand.forEach(c => { if(isJiang(c)) hu += 1; });
+  return hu;
+}
+
+/* ══ SCENE & PATTERN SYSTEM ══ */
+const SUIT_IDX = {'將':0,'帥':0,'士':1,'仕':1,'象':2,'相':2,'車':3,'俥':3,'馬':4,'傌':4,'包':5,'炮':5,'卒':6,'兵':6};
+const SCENE_DEFAULT_PATTERN = {default:'none',sports:'none',toilet:'none',kochikame:'kochikame'};
+const SCENE_DECO = {
+  default:'',
+  sports:`<div style="position:absolute;font-size:46px;opacity:.1;top:11%;left:3%">⚽</div><div style="position:absolute;font-size:30px;opacity:.1;top:58%;left:7%">🥅</div><div style="position:absolute;font-size:32px;opacity:.1;top:16%;right:4%">🏆</div><div style="position:absolute;font-size:26px;opacity:.1;bottom:17%;right:7%">👟</div><div style="position:absolute;font-size:24px;opacity:.1;bottom:34%;left:17%">🎽</div>`,
+  toilet:`<div style="position:absolute;font-size:48px;opacity:.12;top:7%;left:2%">🚽</div><div style="position:absolute;font-size:32px;opacity:.12;top:27%;right:3%">🛁</div><div style="position:absolute;font-size:28px;opacity:.12;bottom:19%;left:7%">🚿</div><div style="position:absolute;font-size:30px;opacity:.12;bottom:9%;right:9%">🪥</div><div style="position:absolute;font-size:26px;opacity:.12;top:51%;left:15%">🧼</div><div style="position:absolute;font-size:38px;opacity:.1;top:5%;right:19%">💩</div><div style="position:absolute;font-size:22px;opacity:.1;bottom:31%;right:17%">🪣</div>`,
+  kochikame:`<div style="position:absolute;font-size:46px;opacity:.1;top:13%;left:3%">👮</div><div style="position:absolute;font-size:36px;opacity:.1;bottom:19%;right:4%">🚔</div><div style="position:absolute;font-size:30px;opacity:.1;top:47%;left:9%">🔫</div><div style="position:absolute;font-size:28px;opacity:.1;top:9%;right:6%">⭐</div><div style="position:absolute;font-size:24px;opacity:.1;bottom:29%;left:5%">🏅</div>`
+};
+// Kochikame: 兩津/中川/秋本/大原/寺井/本田/磯鷺
+const _KC=[
+  `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="12" r="7" fill="#C8924A"/><rect x="2" y="3" width="16" height="6" rx="2.5" fill="#1565C0"/><rect x="1.5" y="7.5" width="17" height="2" fill="#0D47A1"/><rect x="5.5" y="10" width="3" height="1.2" rx=".6" fill="#3d1a00"/><rect x="11.5" y="10" width="3" height="1.2" rx=".6" fill="#3d1a00"/><circle cx="7.5" cy="12" r="1.2" fill="#1a0800"/><circle cx="12.5" cy="12" r="1.2" fill="#1a0800"/><path d="M7.5 15.5 Q10 17.5 12.5 15.5" stroke="#7a3a00" stroke-width="1" fill="none"/></svg>`,
+  `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="11.5" r="7" fill="#F5D5B0"/><ellipse cx="10" cy="4" rx="7" ry="3" fill="#1a1a1a"/><circle cx="7.5" cy="11.5" r="1.2" fill="#1a1a1a"/><circle cx="12.5" cy="11.5" r="1.2" fill="#1a1a1a"/><path d="M7.5 15 Q10 17 12.5 15" stroke="#c07060" stroke-width=".8" fill="none"/><path d="M5 18 L8 15.5 L10 17 L12 15.5 L15 18" fill="#1565C0"/></svg>`,
+  `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><ellipse cx="3.5" cy="12" rx="2" ry="5" fill="#8B4513"/><ellipse cx="16.5" cy="12" rx="2" ry="5" fill="#8B4513"/><circle cx="10" cy="11" r="7" fill="#FDDBB0"/><ellipse cx="10" cy="4.5" rx="5.5" ry="3.5" fill="#8B4513"/><circle cx="7.5" cy="11" r="1.1" fill="#1a0800"/><circle cx="12.5" cy="11" r="1.1" fill="#1a0800"/><path d="M7.5 14 Q10 16 12.5 14" stroke="#E8806A" stroke-width=".8" fill="none"/></svg>`,
+  `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="11" r="8" fill="#F5C898"/><ellipse cx="10" cy="3.5" rx="5" ry="2" fill="#e0b880"/><rect x="4" y="2.5" width="12" height="4" rx="2" fill="#1565C0"/><rect x="3" y="5.5" width="14" height="2" fill="#0D47A1"/><circle cx="7" cy="10.5" r="1.3" fill="#1a1a1a"/><circle cx="13" cy="10.5" r="1.3" fill="#1a1a1a"/><rect x="6.5" y="8.2" width="3" height=".9" rx=".4" fill="#5a2800"/><rect x="10.5" y="8.2" width="3" height=".9" rx=".4" fill="#5a2800"/><path d="M7 14 Q10 16 13 14" stroke="#a06850" stroke-width=".9" fill="none"/></svg>`,
+  `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><ellipse cx="10" cy="11.5" rx="5.5" ry="7" fill="#F5D5B0"/><ellipse cx="10" cy="4.5" rx="4.5" ry="3" fill="#2a1800"/><circle cx="7.5" cy="11.5" r="1.1" fill="#1a1a1a"/><circle cx="12.5" cy="11.5" r="1.1" fill="#1a1a1a"/><path d="M8.5 8.5 L7.5 9.5" stroke="#6a3800" stroke-width=".8"/><path d="M11.5 8.5 L12.5 9.5" stroke="#6a3800" stroke-width=".8"/><path d="M8 14.5 Q10 13.5 12 14.5" stroke="#c09070" stroke-width=".8" fill="none"/><ellipse cx="16" cy="7" rx="1.2" ry="2" fill="#7ad4ff" opacity=".8"/><path d="M15.5 9 L15.8 11" stroke="#7ad4ff" stroke-width=".7" opacity=".8"/></svg>`,
+  `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="11.5" r="7.5" fill="#F5D5B0"/><path d="M2.5 9 Q10 2 17.5 9" fill="#FF6000"/><rect x="2" y="7.5" width="16" height="4" rx="1.5" fill="#CC4000"/><rect x="3" y="9.5" width="14" height="2.5" rx="1" fill="#222"/><rect x="5" y="9.7" width="10" height="1.8" rx=".9" fill="#87CEEB" opacity=".7"/><circle cx="7.5" cy="14.5" r="1.2" fill="#1a1a1a"/><circle cx="12.5" cy="14.5" r="1.2" fill="#1a1a1a"/><path d="M8 17.5 Q10 19 12 17.5" stroke="#c09060" stroke-width=".8" fill="none"/></svg>`,
+  `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="11.5" r="7" fill="#F5D5B0"/><ellipse cx="10" cy="4.5" rx="5" ry="3.5" fill="#6B3A10"/><circle cx="7.5" cy="11.5" r="1.1" fill="#1a1a1a"/><circle cx="12.5" cy="11.5" r="1.1" fill="#1a1a1a"/><circle cx="6.5" cy="13.5" r=".6" fill="#E8A090"/><circle cx="13.5" cy="13.5" r=".6" fill="#E8A090"/><circle cx="5.5" cy="12.5" r=".5" fill="#E8A090"/><circle cx="14.5" cy="12.5" r=".5" fill="#E8A090"/><path d="M7.5 15.5 Q10 17.5 12.5 15.5" stroke="#c08070" stroke-width=".8" fill="none"/><rect x="4" y="17.5" width="12" height="2.5" rx="1" fill="#1565C0"/></svg>`
+];
+// PAW Patrol: Chase/Marshall/Rubble/Rocky/Zuma/Skye/Ryder
+const _PP=[
+  `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><rect x="2.5" y="2" width="15" height="6.5" rx="2.5" fill="#1565C0"/><rect x="1.5" y="7" width="17" height="2" fill="#0D47A1"/><circle cx="10" cy="13" r="7" fill="#C8924A"/><ellipse cx="10" cy="16.5" rx="3.5" ry="1.8" fill="#2a1800"/><circle cx="7.5" cy="11" r="1.3" fill="#1a0800"/><circle cx="12.5" cy="11" r="1.3" fill="#1a0800"/><ellipse cx="10" cy="8.5" rx="4" ry="1.5" fill="#2a1800"/><path d="M4 9 Q3 6 4.5 4" stroke="#C8924A" stroke-width="2.5" fill="none"/><path d="M16 9 Q17 6 15.5 4" stroke="#C8924A" stroke-width="2.5" fill="none"/></svg>`,
+  `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="2" width="14" height="6" rx="2" fill="#E53935"/><rect x="2" y="6.5" width="16" height="2" fill="#C62828"/><circle cx="10" cy="13" r="7" fill="#fff" stroke="#eee" stroke-width=".5"/><circle cx="7.5" cy="11.5" r="1.3" fill="#1a1a1a"/><circle cx="12.5" cy="11.5" r="1.3" fill="#1a1a1a"/><circle cx="6" cy="13.5" r="1" fill="#1a1a1a"/><circle cx="14" cy="13" r=".8" fill="#1a1a1a"/><circle cx="9.5" cy="9" r=".7" fill="#1a1a1a"/><circle cx="12" cy="8.5" r=".6" fill="#1a1a1a"/><path d="M7.5 16.5 Q10 18.5 12.5 16.5" stroke="#f0a0a0" stroke-width=".8" fill="none"/></svg>`,
+  `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 8.5 Q3 2 10 2 Q17 2 18 8.5" fill="#FF8F00"/><rect x="1.5" y="7.5" width="17" height="2.5" fill="#E65100"/><circle cx="10" cy="13" r="7" fill="#A0522D"/><ellipse cx="10" cy="10" rx="5" ry="2" fill="#7a3a10"/><circle cx="7.5" cy="12" r="1.5" fill="#1a0800"/><circle cx="12.5" cy="12" r="1.5" fill="#1a0800"/><ellipse cx="10" cy="16" rx="4" ry="2.5" fill="#7a3a10"/><ellipse cx="6.5" cy="16" rx="1.5" ry="1" fill="#fff"/><ellipse cx="13.5" cy="16" rx="1.5" ry="1" fill="#fff"/></svg>`,
+  `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M4 7.5 Q5 2 10 2 Q15 2 16 7.5" fill="#388E3C"/><rect x="3" y="6.5" width="14" height="2.5" fill="#2E7D32"/><circle cx="10" cy="13" r="7" fill="#9E9E9E"/><circle cx="7.5" cy="12" r="1.2" fill="#2a2a2a"/><circle cx="12.5" cy="12" r="1.2" fill="#2a2a2a"/><ellipse cx="10" cy="15.5" rx="3" ry="1.8" fill="#757575"/><path d="M7.5 17 Q10 19 12.5 17" stroke="#a08060" stroke-width=".8" fill="none"/><path d="M4 9 Q3 6 4.5 4" stroke="#9E9E9E" stroke-width="2" fill="none"/><path d="M16 9 Q17 6 15.5 4" stroke="#9E9E9E" stroke-width="2" fill="none"/></svg>`,
+  `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="12" r="8" fill="#5D4037"/><circle cx="7.5" cy="11" r="1.3" fill="#1a0800"/><circle cx="12.5" cy="11" r="1.3" fill="#1a0800"/><ellipse cx="10" cy="15" rx="3.5" ry="1.8" fill="#3E2723"/><path d="M7.5 17 Q10 19 12.5 17" stroke="#a07060" stroke-width=".8" fill="none"/><rect x="4" y="15.5" width="12" height="4.5" rx="2" fill="#00ACC1"/><path d="M4 9 Q3 5 5 3" stroke="#5D4037" stroke-width="2.5" fill="none"/><path d="M16 9 Q17 5 15 3" stroke="#5D4037" stroke-width="2.5" fill="none"/></svg>`,
+  `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><ellipse cx="4" cy="6" rx="2.5" ry="4.5" fill="#E0B87A" transform="rotate(15 4 6)"/><ellipse cx="16" cy="6" rx="2.5" ry="4.5" fill="#E0B87A" transform="rotate(-15 16 6)"/><circle cx="10" cy="12" r="7" fill="#E0B87A"/><ellipse cx="7.5" cy="11.5" rx="2.5" ry="1.8" fill="#EC407A"/><ellipse cx="12.5" cy="11.5" rx="2.5" ry="1.8" fill="#EC407A"/><rect x="9.5" y="10.5" width="1" height="2" rx=".5" fill="#EC407A"/><circle cx="7.5" cy="11.5" r="1" fill="#1a0800"/><circle cx="12.5" cy="11.5" r="1" fill="#1a0800"/><path d="M7.5 15.5 Q10 17.5 12.5 15.5" stroke="#c09040" stroke-width=".8" fill="none"/></svg>`,
+  `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M3 8 Q4 1.5 10 1.5 Q16 1.5 17 8" fill="#E53935"/><rect x="2" y="6.5" width="16" height="2.5" fill="#C62828"/><circle cx="10" cy="13" r="6.5" fill="#F5CBA0"/><ellipse cx="10" cy="7.5" rx="4.5" ry="2" fill="#8B5E3C"/><circle cx="7.5" cy="12.5" r="1.2" fill="#2a1800"/><circle cx="12.5" cy="12.5" r="1.2" fill="#2a1800"/><path d="M8 16 Q10 17.5 12 16" stroke="#c09060" stroke-width=".8" fill="none"/></svg>`
+];
+// Pikmin: 紅/黃/藍/紫/白/石/翅膀
+const _PM=[
+  `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><line x1="10" y1="2.5" x2="10" y2="6" stroke="#6B2800" stroke-width="1.5"/><ellipse cx="10" cy="2" rx="2.2" ry="1.3" fill="#7CFC00"/><circle cx="10" cy="13" r="7" fill="#E53935"/><ellipse cx="7.5" cy="10.5" rx="1.5" ry=".8" fill="#8B0000"/><ellipse cx="12.5" cy="10.5" rx="1.5" ry=".8" fill="#8B0000"/><circle cx="7.5" cy="12" r="1.5" fill="#fff"/><circle cx="12.5" cy="12" r="1.5" fill="#fff"/><circle cx="7.5" cy="12" r=".7" fill="#000"/><circle cx="12.5" cy="12" r=".7" fill="#000"/><ellipse cx="10" cy="17" rx="3.5" ry="2" fill="#C62828"/></svg>`,
+  `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><line x1="10" y1="2.5" x2="10" y2="6" stroke="#8B6914" stroke-width="1.5"/><ellipse cx="10" cy="2" rx="2.2" ry="1.3" fill="#7CFC00"/><ellipse cx="3" cy="11" rx="2.3" ry="4" fill="#FDD835" transform="rotate(-10 3 11)"/><ellipse cx="17" cy="11" rx="2.3" ry="4" fill="#FDD835" transform="rotate(10 17 11)"/><circle cx="10" cy="13" r="6.5" fill="#FDD835"/><circle cx="7.5" cy="12.5" r="1.5" fill="#fff"/><circle cx="12.5" cy="12.5" r="1.5" fill="#fff"/><circle cx="7.5" cy="12.5" r=".7" fill="#000"/><circle cx="12.5" cy="12.5" r=".7" fill="#000"/><ellipse cx="10" cy="17" rx="3" ry="1.8" fill="#F9A825"/></svg>`,
+  `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><line x1="10" y1="2.5" x2="10" y2="6" stroke="#1a3a7a" stroke-width="1.5"/><ellipse cx="10" cy="2" rx="2.2" ry="1.3" fill="#7CFC00"/><circle cx="10" cy="13" r="7" fill="#1976D2"/><circle cx="7.5" cy="12" r="1.5" fill="#fff"/><circle cx="12.5" cy="12" r="1.5" fill="#fff"/><circle cx="7.5" cy="12" r=".7" fill="#000"/><circle cx="12.5" cy="12" r=".7" fill="#000"/><ellipse cx="10" cy="16.5" rx="3" ry="2" fill="#0D47A1"/><ellipse cx="10" cy="15.5" rx="2.5" ry="1.5" fill="#42A5F5"/></svg>`,
+  `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><line x1="10" y1="2" x2="10" y2="5" stroke="#4a1060" stroke-width="1.5"/><ellipse cx="10" cy="1.5" rx="2.2" ry="1.3" fill="#7CFC00"/><circle cx="10" cy="13" r="8.5" fill="#7B1FA2"/><circle cx="7" cy="12" r="1.8" fill="#fff"/><circle cx="13" cy="12" r="1.8" fill="#fff"/><circle cx="7" cy="12" r=".9" fill="#000"/><circle cx="13" cy="12" r=".9" fill="#000"/><ellipse cx="10" cy="18" rx="4.5" ry="2.5" fill="#6A1B9A"/></svg>`,
+  `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><line x1="10" y1="2.5" x2="10" y2="6" stroke="#999" stroke-width="1.5"/><ellipse cx="10" cy="2" rx="2.2" ry="1.3" fill="#7CFC00"/><circle cx="10" cy="13" r="7" fill="#f8f8f8" stroke="#ccc" stroke-width=".5"/><circle cx="7.5" cy="12" r="1.5" fill="#E53935"/><circle cx="12.5" cy="12" r="1.5" fill="#E53935"/><circle cx="7.5" cy="12" r=".6" fill="#000"/><circle cx="12.5" cy="12" r=".6" fill="#000"/><ellipse cx="10" cy="17" rx="3" ry="2" fill="#e0e0e0"/></svg>`,
+  `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><line x1="10" y1="1.5" x2="10" y2="5" stroke="#555" stroke-width="1.5"/><ellipse cx="10" cy="1.2" rx="2.2" ry="1.3" fill="#7CFC00"/><path d="M3 14.5 Q2 8 5 6 Q8 3.5 12 4.5 Q16.5 4.5 17.5 9 Q18.5 13 17 15.5 Q15 19.5 10 19.5 Q5 19.5 3 14.5z" fill="#757575"/><path d="M5 8.5 Q7.5 6.5 9.5 7.5" stroke="#9E9E9E" stroke-width=".8" fill="none"/><path d="M11.5 6 Q14 5.5 16 7.5" stroke="#9E9E9E" stroke-width=".8" fill="none"/><circle cx="7.5" cy="12" r="1.5" fill="#fff"/><circle cx="12.5" cy="12" r="1.5" fill="#fff"/><circle cx="7.5" cy="12" r=".7" fill="#000"/><circle cx="12.5" cy="12" r=".7" fill="#000"/></svg>`,
+  `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><line x1="10" y1="2.5" x2="10" y2="6" stroke="#c06080" stroke-width="1.5"/><ellipse cx="10" cy="2" rx="2.2" ry="1.3" fill="#7CFC00"/><ellipse cx="3.5" cy="8.5" rx="3.5" ry="2" fill="rgba(180,220,255,.7)" transform="rotate(-20 3.5 8.5)"/><ellipse cx="16.5" cy="8.5" rx="3.5" ry="2" fill="rgba(180,220,255,.7)" transform="rotate(20 16.5 8.5)"/><circle cx="10" cy="13" r="6.5" fill="#F48FB1"/><circle cx="7.5" cy="12.5" r="1.4" fill="#fff"/><circle cx="12.5" cy="12.5" r="1.4" fill="#fff"/><circle cx="7.5" cy="12.5" r=".7" fill="#000"/><circle cx="12.5" cy="12.5" r=".7" fill="#000"/><ellipse cx="10" cy="17" rx="3" ry="2" fill="#E91E8C"/></svg>`
+];
+// Animals: 將帥/士仕/象相/車俥/馬傌/包炮/卒兵
+const _AN=['🦁','🦊','🐘','🦬','🐴','🐸','🐣'];
+const CARD_ICONS={kochikame:_KC,pawpatrol:_PP,pikmin:_PM,animals:_AN};
+
+function getCardIconHTML(suit){
+  const pat=G.cardPattern||'none';
+  if(!pat||pat==='none'||pat==='zebra') return '';
+  const icons=CARD_ICONS[pat];
+  if(!icons) return '';
+  const idx=SUIT_IDX[suit]??-1;
+  if(idx<0||idx>=icons.length) return '';
+  return `<div class="ci">${icons[idx]}</div>`;
+}
+function applySceneClasses(scene,pattern){
+  const b=document.body;
+  [...b.classList].filter(c=>c.startsWith('sc-')||c.startsWith('pat-')).forEach(c=>b.classList.remove(c));
+  if(scene&&scene!=='default') b.classList.add('sc-'+scene);
+  if(pattern==='zebra') b.classList.add('pat-zebra');
+  const deco=document.getElementById('sceneDeco');
+  if(deco) deco.innerHTML=SCENE_DECO[scene]||'';
+}
+let _setupScene='default',_setupPattern='none';
+function showSetup(){
+  _setupScene='default';_setupPattern='none';
+  document.querySelectorAll('.scene-btn').forEach(b=>b.classList.toggle('active',b.dataset.scene==='default'));
+  document.querySelectorAll('.pat-btn').forEach(b=>b.classList.toggle('active',b.dataset.pat==='none'));
+  show('setupScreen');
+}
+function selectScene(s){
+  _setupScene=s;
+  document.querySelectorAll('.scene-btn').forEach(b=>b.classList.toggle('active',b.dataset.scene===s));
+  selectPattern(SCENE_DEFAULT_PATTERN[s]||'none');
+}
+function selectPattern(p){
+  _setupPattern=p;
+  document.querySelectorAll('.pat-btn').forEach(b=>b.classList.toggle('active',b.dataset.pat===p));
+}
+function confirmSetup(){
+  applySceneClasses(_setupScene,_setupPattern);
+  startGameActual(_setupScene,_setupPattern);
+}
+
+/* ── Select & play card ── */
+let _selectedForMeld = [];
+
+function cancelSelection(){
+  _selectedForMeld = [];
+  G.selectedIdx = -1;
+  render();
+}
+
+function selectCard(i){
+  if(!G.active) return;
+  if(G.turn!=='player') return;
+
+  // 吃牌後必須打出一張
+  if(G.mustDiscard){
+    discardCard(i);
+    return;
+  }
+
+  if(G.phase!=='play') return;
+
+  if(_selectedForMeld.includes(i)){
+    if(_selectedForMeld.length === 1){
+      // 單選再點同一張 → 出牌
+      _selectedForMeld = [];
+      G.selectedIdx = -1;
+      playCard(i);
+      return;
+    } else {
+      // 多選中取消這張
+      _selectedForMeld = _selectedForMeld.filter(x => x !== i);
+      G.selectedIdx = _selectedForMeld.length > 0 ? _selectedForMeld[_selectedForMeld.length-1] : -1;
+    }
+  } else {
+    // 加入選取
+    _selectedForMeld.push(i);
+    G.selectedIdx = i;
+  }
+
+  // 顯示提示
+  if(_selectedForMeld.length >= 2){
+    const selCards = _selectedForMeld.map(x => G.playerHand[x]);
+    const t = meldTypeForMeld(selCards);
+    if(t.valid && t.ming > 0){
+      toast('已選 ' + selCards.map(c=>COLOR_NAME[c.color]+c.suit).join(' ') + ' → ' + t.ming + '胡，按「組合」確認');
+    } else if(t.valid){
+      toast('已選 ' + selCards.map(c=>COLOR_NAME[c.color]+c.suit).join(' ') + '（有效組合），按「組合」確認');
+    } else {
+      toast('已選 ' + selCards.length + ' 張，繼續加牌或重新選取');
+    }
+  }
+
+  render(); // 必須用完整 render 才能更新組合按鈕
+}
+
+function formPlayerMeld(idxs){
+  const cards = idxs.map(i => G.playerHand[i]);
+  const t = meldType(cards);
+  // Remove from hand (descending order to preserve indices)
+  [...idxs].sort((a,b)=>b-a).forEach(i => G.playerHand.splice(i,1));
+  G.playerMelds.push(cards);
+  _selectedForMeld = [];
+  G.selectedIdx = -1;
+  sortHand(G.playerHand);
+  const label = cards.map(c => COLOR_NAME[c.color]+c.suit).join(' ');
+  if(t.ming > 0){
+    toast('✅ 組合完成！' + label + ' +' + t.ming + '胡');
+  } else {
+    toast('✅ 組合 ' + label + '（有效組合，不計胡）');
+  }
+  // 不自動胡牌，等玩家按「胡！」按鈕
+  save(); render();
+}
+
+function playCard(i){
+  const card=G.playerHand[i];
+  G.playerHand.splice(i,1);
+  G.topCard=card;
+  G.selectedIdx=-1; _selectedForMeld=[]; G.hasDrawn=false;
+  sortHand(G.playerHand);
+  save(); render();
+  toast(`出牌：${COLOR_NAME[card.color]}${card.suit}`);
+  G.turn='cpu'; render();
+  setTimeout(()=>cpuCheckEat(),700);
+}
+
+function discardCard(i){
+  const card=G.playerHand[i];
+  G.playerHand.splice(i,1);
+  G.topCard=card;
+  G.mustDiscard=false;
+  G.selectedIdx=-1;
+  _selectedForMeld=[];
+  sortHand(G.playerHand);
+  G.turn='cpu';         // 先設回合再 render，防止胡牌按鈕瞬閃
+  save();render();
+  toast(`打出：${COLOR_NAME[card.color]}${card.suit}`);
+  setTimeout(()=>cpuCheckEat(),700);
+}
+
+/* ── Draw ── */
+function playerDraw(){
+  if(G.turn!=='player'||!G.active||G.mustDiscard) return;
+  if(G.hasDrawn){toast('本回合已摸牌');return;}
+  if(G.deck.length===0){toast('牌堆已空！');return;}
+  const c=G.deck.pop();
+  G.playerHand.push(c);
+  G.hasDrawn=true;
+  sortHand(G.playerHand);
+  // Check if drawn card completes a meld
+  const meld=findMeldForCard(c,G.playerHand.filter((_,i)=>i!==G.playerHand.length-1));
+  save();render();
+  toast(`摸牌：${COLOR_NAME[c.color]}${c.suit}`);
+  notifyPlayer('🃏','摸牌完成！','請出牌或組合手牌');
+}
+
+/* ── Eat check ── */
+function findEatCandidates(card, hand){
+  /* 回傳所有可與 card 組成有效牌組的候選組合
+     優先順序（index 0 = 最優先）：
+     1. 開牌 (kai)  - 手中有3張同色同字 → 湊4張 → 最高胡數
+     2. 對牌 (dui)  - 手中有2張同色同字 → 湊3張
+     3. 吃牌 (chi)  - 手中有2張同色湊順子
+     4. 兵卒 (bing) - 不同色兵卒湊組
+  */
+  const dui  = []; // 對牌 / 開牌 candidates（優先）
+  const chi  = []; // 吃牌 candidates
+  const bing = []; // 兵卒 candidates
+
+  // ── 對牌 / 開牌：同色同字 ──
+  const sameIdxs = hand.reduce((a,c2,i)=>{
+    if(c2.color===card.color && c2.suit===card.suit) a.push(i);
+    return a;
+  }, []);
+  // 開牌：手中3張 + 打出1張 = 4張
+  if(sameIdxs.length >= 3){
+    dui.push({type:'kai', priority:0,
+      cards:[card, hand[sameIdxs[0]], hand[sameIdxs[1]], hand[sameIdxs[2]]],
+      handIdxs:[sameIdxs[0], sameIdxs[1], sameIdxs[2]]});
+  }
+  // 對牌：手中2張 + 打出1張 = 3張
+  if(sameIdxs.length >= 2){
+    dui.push({type:'dui', priority:1,
+      cards:[card, hand[sameIdxs[0]], hand[sameIdxs[1]]],
+      handIdxs:[sameIdxs[0], sameIdxs[1]]});
+  }
+  // 對牌（2張）：手中1張 + 打出1張 = 2張同色同字（0胡有效組合）
+  if(sameIdxs.length >= 1){
+    dui.push({type:'pair', priority:2,
+      cards:[card, hand[sameIdxs[0]]],
+      handIdxs:[sameIdxs[0]]});
+  }
+
+  // ── 吃牌：同色順子 ──
+  const shh = SHUN_HIGH[card.color];
+  const shl = SHUN_LOW[card.color];
+  if(shh && shh.includes(card.suit)){
+    const need = shh.filter(s=>s!==card.suit);
+    const idxs = findIndices(hand, card.color, need);
+    if(idxs) chi.push({type:'shun_high', priority:3,
+      cards:[card,...idxs.map(i=>hand[i])], handIdxs:idxs});
+  }
+  if(shl && shl.includes(card.suit)){
+    const need = shl.filter(s=>s!==card.suit);
+    const idxs = findIndices(hand, card.color, need);
+    if(idxs) chi.push({type:'shun_low', priority:4,
+      cards:[card,...idxs.map(i=>hand[i])], handIdxs:idxs});
+  }
+
+  // ── 兵卒：不同色兵卒組合 ──
+  const isBing = card.suit === BING[card.color];
+  if(isBing){
+    const bIdxs = hand.reduce((a,c2,i)=>{
+      if(c2.suit===BING[c2.color]) a.push(i);
+      return a;
+    }, []);
+    if(bIdxs.length >= 2){
+      bing.push({type:'bing3', priority:5,
+        cards:[card, hand[bIdxs[0]], hand[bIdxs[1]]],
+        handIdxs:[bIdxs[0], bIdxs[1]]});
+    }
+    if(bIdxs.length >= 1){
+      bing.push({type:'bing2', priority:6,
+        cards:[card, hand[bIdxs[0]]],
+        handIdxs:[bIdxs[0]]});
+    }
+  }
+
+  // 依優先順序合併：對牌/開牌 → 吃牌 → 兵卒
+  return [...dui, ...chi, ...bing];
+}
+
+function findIndices(hand,color,suits){
+  const used=[];
+  for(const s of suits){
+    const i=hand.findIndex((c,j)=>c.color===color&&c.suit===s&&!used.includes(j));
+    if(i===-1) return null;
+    used.push(i);
+  }
+  return used;
+}
+
+function findMeldForCard(card,hand){
+  // Returns first valid meld or null
+  const c=findEatCandidates(card,hand);
+  return c.length>0?c[0]:null;
+}
+
+/* ── Player eat prompt ── */
+let _eatChoice=null;
+function promptEat(card){
+  const cands = findEatCandidates(card, G.playerHand);
+  if(cands.length === 0){ skipEat(); return; }
+
+  // index 0 = 最高優先（對牌/開牌 > 吃牌 > 兵卒）
+  _eatChoice = cands[0];
+
+  // 判斷動作類型標題
+  const typeLabels = {
+    kai:       '🀄 開牌！（4張同色同字）',
+    dui:       '🀄 對牌！（3張同色同字）',
+    pair:      '🃏 對子（2張同色同字）',
+    shun_high: '🃏 吃牌（順子：將士象）',
+    shun_low:  '🃏 吃牌（順子：車馬包）',
+    bing3:     '🃏 吃牌（兵卒3張）',
+    bing2:     '🃏 吃牌（兵卒2張）',
+  };
+  const title = typeLabels[_eatChoice.type] || '吃牌？';
+
+  // 渲染預覽牌
+  const prev = document.getElementById('eatPreview');
+  prev.innerHTML = '';
+  _eatChoice.cards.forEach(c => {
+    const d = document.createElement('div');
+    d.className = `rcard clr-${c.color}`;
+    d.innerHTML = `<span class="rs">${c.suit}</span><span class="rc" style="font-size:8px">${COLOR_NAME[c.color]}</span>`;
+    prev.appendChild(d);
+  });
+
+  const t = meldType(_eatChoice.cards);
+  const huText = t.ming > 0 ? `+${t.ming} 胡` : '有效組合（不計胡）';
+  document.getElementById('eatMsg').textContent = `組合後 ${huText}，完成後需打出一張牌`;
+  document.getElementById('eatTitle').textContent = title;
+
+  // 如果有多個選項，通知玩家
+  if(cands.length > 1){
+    const types = cands.map(c=>typeLabels[c.type]||c.type).join(' / ');
+    notifyPlayer('🀄', title.replace(/[🀄🃏]/g,'').trim(), `可選：${cands.length}種組合，顯示最優先`);
+  } else {
+    notifyPlayer('🀄', title.replace(/[🀄🃏]/g,'').trim(), huText);
+  }
+
+  document.getElementById('eatOverlay').classList.remove('hidden');
+}
+
+function doEat(){
+  document.getElementById('eatOverlay').classList.add('hidden');
+  if(!_eatChoice) return;
+  // Remove hand cards used
+  const toRemove=[..._eatChoice.handIdxs].sort((a,b)=>b-a);
+  toRemove.forEach(i=>G.playerHand.splice(i,1));
+  // Add meld & clear stale selection
+  G.playerMelds.push(_eatChoice.cards);
+  _selectedForMeld = [];
+  G.selectedIdx = -1;
+  G.topCard=null;
+  sortHand(G.playerHand);
+  // ✅ 吃牌後立即檢查：達 8 胡直接勝利，不需再打牌
+  if(calcHuWithHand(G.playerHand, G.playerMelds) >= 8){
+    save();
+    playerWins();
+    return;
+  }
+  G.mustDiscard=true;
+  G.turn='player';
+  render();
+  document.getElementById('discardHint').classList.remove('hidden');
+  notifyPlayer('🍽️','吃牌成功！','請從手牌中打出一張牌');
+  toast('吃牌成功！請打出一張牌');
+}
+
+function skipEat(){
+  document.getElementById('eatOverlay').classList.add('hidden');
+  _eatChoice = null;
+  G.topCard = null;   // 不吃：清除場牌，保持玩家回合
+  render();
+  toast('👤 請摸牌或出牌');
+}
+
+/* ── CPU logic ── */
+/* ── 電腦看門狗（Watchdog）── */
+let _cpuWatchdog = null;
+let _hammerTimer  = null;
+const CPU_TIMEOUT  = 6000;  // 6秒無回應 → 自動叫醒
+const HAMMER_DELAY = 3500;  // 3.5秒後顯示錘子按鈕
+
+function _cpuWatchdogStart(){
+  _cpuWatchdogClear();
+  // 3.5秒後顯示錘子按鈕
+  _hammerTimer = setTimeout(()=>{
+    document.getElementById('hammerBtn').classList.add('show');
+  }, HAMMER_DELAY);
+  // 6秒後自動叫醒
+  _cpuWatchdog = setTimeout(()=>{
+    if(G.turn==='cpu' && G.active){
+      console.warn('[Watchdog] CPU 無回應，自動叫醒');
+      wakeUpCpu(true);  // true = 自動觸發
+    }
+  }, CPU_TIMEOUT);
+}
+
+function _cpuWatchdogClear(){
+  clearTimeout(_cpuWatchdog);
+  clearTimeout(_hammerTimer);
+  _cpuWatchdog = null;
+  _hammerTimer  = null;
+  document.getElementById('hammerBtn').classList.remove('show');
+}
+
+function cpuThinkStart(){
+  document.getElementById('thinking').classList.remove('hidden');
+  _cpuWatchdogStart();
+}
+function cpuThinkEnd(){
+  document.getElementById('thinking').classList.add('hidden');
+  _cpuWatchdogClear();
+}
+
+/* 叫醒電腦 */
+function wakeUpCpu(auto=false){
+  _cpuWatchdogClear();
+  cpuThinkEnd();
+  // 強制交還玩家回合
+  G.turn='player';
+  G.hasDrawn=false;
+  G.mustDiscard=false;
+  G.topCard=null;
+  _selectedForMeld=[];
+  G.selectedIdx=-1;
+  save(); render();
+  if(auto){
+    toast('⚙️ 電腦無回應，已自動恢復');
+    notifyPlayer('⚙️','已自動恢復！','電腦回合逾時，輪到玩家出牌');
+  } else {
+    toast('🔨 咚！電腦被敲醒了，輪到玩家出牌');
+    notifyPlayer('🔨','電腦被敲醒了！','輪到玩家出牌');
+  }
+}
+
+function cpuCheckEat(){
+  if(!G.active) return;
+  if(!G.topCard){ cpuTurn(); return; }
+  const card = G.topCard;
+  const cands = findEatCandidates(card, G.cpuHand);
+  // CPU always eats if it gets >= 1 ming-hu from the combo
+  // findEatCandidates 已依優先順序排列（index 0 = 最高優先：對牌 > 吃牌 > 兵卒）
+  const bestCand = cands.length > 0 ? cands[0] : null;
+
+  if(bestCand && meldType(bestCand.cards).ming >= 1){
+    cpuThinkStart();
+    setTimeout(()=>{
+      try{
+      cpuThinkEnd();
+      if(!G.active) return;
+      // Eat the card
+      const toRm = [...bestCand.handIdxs].sort((a,b)=>b-a);
+      toRm.forEach(i => G.cpuHand.splice(i,1));
+      G.cpuMelds.push(bestCand.cards);
+      G.topCard = null;
+      // Check win immediately
+      if(checkWin(G.cpuHand, G.cpuMelds)){ cpuWins(); return; }
+      // Must discard one card
+      if(G.cpuHand.length > 0){
+        const di = cpuChooseDiscard();
+        const disc = G.cpuHand.splice(di,1)[0];
+        G.topCard = disc;
+        toast(`🤖 電腦吃牌，打出：${COLOR_NAME[disc.color]}${disc.suit}`);
+      }
+      if(checkWin(G.cpuHand, G.cpuMelds)){ cpuWins(); return; }
+      G.turn='player'; G.hasDrawn=false;
+      save(); render();
+      notifyPlayer('👤','換你了！','可摸牌、出牌或吃牌');
+      // Check if player can eat CPU's discard
+      if(G.topCard){
+        const pCands = findEatCandidates(G.topCard, G.playerHand);
+        if(pCands.length>0){
+          setTimeout(()=>promptEat(G.topCard), 500);
+        } else {
+          G.topCard = null;
+          render();
+          toast('👤 輪到玩家出牌');
+        }
+      } else {
+        toast('👤 輪到玩家出牌');
+      }
+      }catch(e){ console.error('[cpuCheckEat]',e); wakeUpCpu(true); }
+    }, 1000);
+  } else {
+    cpuTurn();
+  }
+}
+
+function cpuTurn(){
+  if(!G.active || G.turn!=='cpu') return;
+  // Clear center - player's card is no longer available (CPU chose not to eat)
+  G.topCard = null;
+  render();
+  cpuThinkStart();
+  setTimeout(()=>{
+    try{
+    cpuThinkEnd();
+    if(!G.active) return;
+
+    // Try to form melds from existing hand (simulate drawing)
+    cpuTryFormMelds();
+
+    // Check win
+    if(checkWin(G.cpuHand, G.cpuMelds)){ cpuWins(); return; }
+
+    // 手牌清空不等於勝利，必須胡數 >= 8
+    if(G.cpuHand.length === 0 && checkWin(G.cpuHand, G.cpuMelds)){ cpuWins(); return; }
+    if(G.cpuHand.length === 0){
+      // ✅ 死鎖修復：手牌空但未達胡數 → 正常交還玩家回合
+      G.turn='player'; G.hasDrawn=false;
+      save(); render();
+      toast('👤 輪到玩家出牌');
+      return;
+    }
+    const di = cpuChooseDiscard();
+    const disc = G.cpuHand.splice(di,1)[0];
+    G.topCard = disc;
+    toast(`🤖 電腦出牌：${COLOR_NAME[disc.color]}${disc.suit}`);
+
+    if(checkWin(G.cpuHand, G.cpuMelds)){ cpuWins(); return; }
+    G.turn='player'; G.hasDrawn=false;
+    save(); render();
+    notifyPlayer('👤','換你了！','可摸牌、出牌或吃牌');
+
+    // Check if player can eat CPU's discard
+    const pCands = findEatCandidates(disc, G.playerHand);
+    if(pCands.length>0){
+      setTimeout(()=>promptEat(disc), 500);
+    } else {
+      // Player can't eat - clear center so player starts fresh
+      G.topCard = null;
+      render();
+      toast('👤 輪到玩家出牌');
+    }
+    }catch(e){ console.error('[cpuTurn]',e); wakeUpCpu(true); }
+  }, 1400);
+}
+
+function cpuTryFormMelds(){
+  // Repeatedly scan hand for completable melds
+  let changed = true;
+  let iterations = 0;
+  while(changed && iterations < 10){
+    changed = false; iterations++;
+    for(let i=0; i<G.cpuHand.length; i++){
+      const card = G.cpuHand[i];
+      const rest = G.cpuHand.filter((_,j)=>j!==i);
+      const cands = findEatCandidates(card, rest);
+      const best = cands.reduce((b,c)=>{
+        return (!b || meldType(c.cards).ming > meldType(b.cards).ming) ? c : b;
+      }, null);
+      if(best && meldType(best.cards).ming >= 1){
+        // Form this meld
+        const allIdxs = [i, ...best.handIdxs.map(j=> j>=i ? j+1 : j)].sort((a,b)=>b-a);
+        // Safer: rebuild meld from original hand
+        const meldCards = best.cards; // already has card + partners
+        // Remove used cards from hand by matching
+        let removed = 0;
+        for(const mc of meldCards){
+          const idx = G.cpuHand.findIndex(h=>h.color===mc.color&&h.suit===mc.suit);
+          if(idx>=0){ G.cpuHand.splice(idx,1); removed++; }
+        }
+        if(removed === meldCards.length){
+          G.cpuMelds.push(meldCards);
+          changed = true;
+          break;
+        }
+      }
+    }
+  }
+}
+
+function cpuChooseDiscard(){
+  if(G.cpuHand.length===0) return 0;
+  // Score each card: how useful it is (part of potential meld)
+  let worst=-1, worstScore=999;
+  G.cpuHand.forEach((c,i)=>{
+    const rest = G.cpuHand.filter((_,j)=>j!==i);
+    const potentialHu = findEatCandidates(c, rest).reduce((s,cd)=>s+meldType(cd.cards).ming,0);
+    if(potentialHu < worstScore){ worstScore=potentialHu; worst=i; }
+  });
+  return worst>=0 ? worst : 0;
+}
+
+/* ── Win check ── */
+
+/* ════════════════════════════
+   胡牌規則
+   ════════════════════════════
+   可胡條件（同時滿足）：
+   1. 輪到玩家且不在吃牌後棄牌狀態
+   2. 已組合的牌組（melds）總胡數 >= 8
+      （手中剩餘未組合的牌不影響判斷）
+   必須：按下「胡！」按鈕才算胡牌
+   ════════════════════════════ */
+
+// 完整胡牌判斷（用於電腦自動勝利偵測）
+function checkWin(hand, melds){
+  return calcHuWithHand(hand, melds) >= 8;
+}
+
+// 更新胡牌按鈕顯示狀態（每次 render 都呼叫）
+function checkHuBtn(){
+  const btn = document.getElementById('huBtn');
+  const hint = document.getElementById('discardHint');
+
+  // 吃牌後必須棄牌，此時不能宣告胡牌
+  hint.classList.toggle('hidden', !G.mustDiscard);
+  if(G.mustDiscard || G.turn !== 'player' || !G.active){
+    btn.classList.remove('show');
+    return;
+  }
+
+  const hu = calcHuWithHand(G.playerHand, G.playerMelds);
+  // 手中不能有非將/帥的散牌（士、象、卒等必須先組合）
+  const handClear = G.playerHand.every(c => isJiang(c));
+
+  // 胡牌按鈕顯示條件：組合區 + 手中將帥單牌 >= 8 胡，且手中無其他散牌
+  const wrap = document.getElementById('huBtnWrap');
+  if(hu >= 8 && handClear){
+    btn.classList.add('show');
+    if(wrap) wrap.style.minHeight = '52px';
+    // 胡牌按鈕出現時通知玩家
+    if(!btn.classList.contains('_notified')){
+      btn.classList.add('_notified');
+      notifyPlayer('🀄','可以胡牌了！','按「胡牌！」按鈕宣告勝利');
+    }
+  } else {
+    btn.classList.remove('show');
+    btn.classList.remove('_notified');
+    if(wrap) wrap.style.minHeight = '0';
+  }
+}
+
+// 玩家按下「胡！」按鈕時呼叫
+function declareHu(){
+  if(!G.active) return;
+  if(G.turn !== 'player'){ toast('❌ 現在是電腦的回合'); return; }
+  if(G.mustDiscard){ toast('❌ 請先打出一張牌'); return; }
+
+  const hu = calcHuWithHand(G.playerHand, G.playerMelds);
+
+  if(hu >= 8){
+    playerWins();
+  } else {
+    toast(`❌ 目前 ${hu} 胡（含手中將帥），還差 ${8 - hu} 胡才能胡牌！`);
+  }
+}
+
+function playerWins(){
+  G.active=false; G.pScore++;
+  localStorage.removeItem('scp2');
+  document.getElementById('contBtn').style.display='none';
+  const hu = calcHuWithHand(G.playerHand, G.playerMelds);
+  showModal(`🎉 胡牌！${hu}胡`,[
+    {l:'再來一局',c:'p',f:()=>{closeModal();startNew();}},
+    {l:'回主頁',c:'s',f:()=>{closeModal();show('home');}}
+  ],true);
+}
+
+function cpuWins(){
+  G.active=false; G.cScore++;
+  localStorage.removeItem('scp2');
+  document.getElementById('contBtn').style.display='none';
+  const hu = calcHuWithHand(G.cpuHand, G.cpuMelds);
+  showModal(`😢 電腦胡牌（${hu}胡）\n下次加油！`,[
+    {l:'再來一局',c:'p',f:()=>{closeModal();startNew();}},
+    {l:'回主頁',c:'s',f:()=>{closeModal();show('home');}}
+  ]);
+}
+
+/* ── Modal ── */
+function showModal(title, btns, win=false){
+  document.getElementById('mt').textContent=title;
+  document.getElementById('mm').textContent='';
+  const be=document.getElementById('mbtns');
+  be.innerHTML='';
+  btns.forEach(b=>{
+    const el=document.createElement('button');
+    el.className=`mbtn2 ${b.c}`;el.textContent=b.l;el.onclick=b.f;
+    be.appendChild(el);
+  });
+  document.getElementById('mbox').className=win?'mbox win-anim':'mbox';
+  document.getElementById('modal').classList.remove('hidden');
+}
+function closeModal(){document.getElementById('modal').classList.add('hidden');}
+
+/* ── Toast ── */
+let _tt;
+function toast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.classList.remove('hidden');
+  clearTimeout(_tt);
+  _tt=setTimeout(()=>el.classList.add('hidden'),2400);
+}
+
+/* ── Init ── */
+window.onload=()=>{
+  const s=localStorage.getItem('scp2');
+  if(s){try{const g=JSON.parse(s);if(g.active)document.getElementById('contBtn').style.display='block';}catch(e){}}
+};
+</script>
+<script>
+window.addEventListener('load', function(){
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isStandalone = window.navigator.standalone;
+  const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent);
+  if(isIOS && !isStandalone){
+    document.getElementById('installBtn').style.display='flex';
+    document.getElementById('installBtn').onclick=function(){
+      document.getElementById('iosHint').style.display='block';
+    };
+  }
+  if(!isMobile){
+    // On desktop, show install hint anyway
+    document.getElementById('installBtn').style.display='flex';
+  }
+});
+</script>
+</body>
+</html>
