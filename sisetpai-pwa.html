@@ -2160,24 +2160,32 @@ window.onload=()=>{
 <script>
 // BGM
 let _bgmOn = true;
+let _bgmStarted = false;
 function _startBGM(){
   const a = document.getElementById('bgmAudio');
-  if(!a) return;
+  if(!a || !_bgmOn) return;
   a.loop = true;
   a.volume = 1;
-  a.play().catch(()=>{});
+  a.play().then(()=>{ _bgmStarted = true; }).catch(()=>{});
+}
+function _onFirstInteraction(){
+  if(_bgmStarted) return;
+  _startBGM();
 }
 function toggleBGM(){
   _bgmOn = !_bgmOn;
   const a = document.getElementById('bgmAudio');
   const btn = document.getElementById('bgmBtn');
-  if(_bgmOn){ a.play().catch(()=>{}); }
+  if(_bgmOn){ _startBGM(); }
   else { a.pause(); }
   btn.textContent = _bgmOn ? '🎵' : '🔇';
 }
 window.addEventListener('load', function(){
   _refreshInstallBtn();
-  _startBGM();
+  _startBGM(); // 成功則直接播放；若被瀏覽器封鎖則等待互動
+  ['click','touchstart','keydown'].forEach(ev =>
+    document.addEventListener(ev, _onFirstInteraction, {once:false, passive:true})
+  );
 });
 </script>
 </body>
