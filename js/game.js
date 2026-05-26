@@ -898,12 +898,13 @@ function doEat(){
   toRemove.forEach(i=>G.playerHand.splice(i,1));
   // Add meld & clear stale selection
   G.playerMelds.push(_eatChoice.cards);
+  G.playerMeldsAn.push(false);          // Bug 1 fix：吃牌永遠是明胡，保持陣列同步
   _selectedForMeld = [];
   G.selectedIdx = -1;
   G.topCard=null;
   sortHand(G.playerHand);
-  // ✅ 吃牌後立即檢查：達 8 胡直接勝利，不需再打牌
-  if(calcHuWithHand(G.playerHand, G.playerMelds, G.playerMeldsAn) >= 8){
+  // ✅ 吃牌後立即檢查：達 8 胡且散牌已清 → 直接勝利（Bug 2 fix：加入 Rule 15 檢查）
+  if(calcHuWithHand(G.playerHand, G.playerMelds, G.playerMeldsAn) >= 8 && isHandClearForWin(G.playerHand)){
     save();
     playerWins();
     return;
