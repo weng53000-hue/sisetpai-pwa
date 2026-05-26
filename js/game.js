@@ -50,7 +50,8 @@ let G = {
   hasDrawn:false,
   drewFromEmpty:false,
   mustDiscard:false,
-  drawnCard:null,       // Rule 23：記錄本回合摸到的牌（物件參考）
+  drawnCard:null,       // Rule 23：摸牌無法配對時限定只能出這張
+  stagingCard:null,     // 待出牌區：摸牌後暫放此處，未入手中
   pScore:0, cScore:0,
   active:false,
 };
@@ -74,7 +75,7 @@ function startGameActual(scene,pattern){
   G.playerHand=[];G.cpuHand=[];
   G.playerMelds=[];G.cpuMelds=[];
   G.topCard=null;G.turn='player';G.phase='play';
-  G.selectedIdx=-1;G.hasDrawn=false;G.drewFromEmpty=false;G.mustDiscard=false;G.drawnCard=null;G.playerMeldsAn=[];G.active=true;
+  G.selectedIdx=-1;G.hasDrawn=false;G.drewFromEmpty=false;G.mustDiscard=false;G.drawnCard=null;G.stagingCard=null;G.playerMeldsAn=[];G.active=true;
   G.scene=scene||'default'; G.cardPattern=pattern||'none';
   // Deal 18 cards each
   for(let i=0;i<18;i++){G.playerHand.push(G.deck.pop());G.cpuHand.push(G.deck.pop());}
@@ -88,7 +89,7 @@ function startGameActual(scene,pattern){
 
 function loadGame(){
   const s=localStorage.getItem('scp2');
-  if(s){G=JSON.parse(s);G.active=true;if(G.drawnCard===undefined)G.drawnCard=null;if(!G.playerMeldsAn)G.playerMeldsAn=[];applySceneClasses(G.scene||'default',G.cardPattern||'none');show('game');render();toast('繼續上次牌局');}
+  if(s){G=JSON.parse(s);G.active=true;if(G.drawnCard===undefined)G.drawnCard=null;if(G.stagingCard===undefined)G.stagingCard=null;if(!G.playerMeldsAn)G.playerMeldsAn=[];applySceneClasses(G.scene||'default',G.cardPattern||'none');show('game');render();toast('繼續上次牌局');}
 }
 function save(){localStorage.setItem('scp2',JSON.stringify(G));document.getElementById('contBtn').style.display='block';}
 function pauseGame(){save();showModal('暫停',[{l:'繼續遊戲',c:'p',f:()=>{closeModal();show('game');}},{l:'回主頁',c:'s',f:()=>{closeModal();show('home');}},{l:'🗑️ 結束遊戲',c:'d',f:()=>endGame()}]);}
@@ -208,6 +209,21 @@ function _startTug(){
 
 /* ── Try form meld button ── */
 function tryFormMeld(){
+  // 待出牌區模式：摸牌 + 選取的手牌一起組合
+  if(G.stagingCard){
+    if(_selectedForMeld.length < 1){ toast('請先選取手牌才能與摸牌組合'); return; }
+    const allCards = [G.stagingCard, ..._selectedForMeld.map(x => G.playerHand[x])];
+    const t = meldTypeForMeld(allCards);
+    if(t.valid){
+      formMeldWithStaging([..._selectedForMeld], false);
+    } else {
+      toast('❌ 這幾張牌無法與摸牌組合，請重新選取');
+      _selectedForMeld = [];
+      G.selectedIdx = -1;
+      render();
+    }
+    return;
+  }
   if(_selectedForMeld.length < 2){ toast('請先選取 2 張以上的牌才能組合'); return; }
   const selCards = _selectedForMeld.map(x => G.playerHand[x]);
   const t = meldTypeForMeld(selCards);
@@ -223,6 +239,21 @@ function tryFormMeld(){
 
 // Rule 20：暗胡按鈕觸發
 function tryFormMeldAn(){
+  // 待出牌區模式：摸牌 + 選取的手牌一起暗胡組合
+  if(G.stagingCard){
+    if(_selectedForMeld.length < 1){ toast('請先選取手牌才能與摸牌組合'); return; }
+    const allCards = [G.stagingCard, ..._selectedForMeld.map(x => G.playerHand[x])];
+    const t = meldTypeForMeld(allCards);
+    if(t.valid){
+      formMeldWithStaging([..._selectedForMeld], true);
+    } else {
+      toast('❌ 這幾張牌無法與摸牌組合，請重新選取');
+      _selectedForMeld = [];
+      G.selectedIdx = -1;
+      render();
+    }
+    return;
+  }
   if(_selectedForMeld.length < 2){ toast('請先選取 2 張以上的牌才能組合'); return; }
   const selCards = _selectedForMeld.map(x => G.playerHand[x]);
   const t = meldTypeForMeld(selCards);
@@ -261,7 +292,7 @@ function meldTypeForMeld(cards){
 
 /* ── Render ── */
 function render(){
-  renderCpu(); renderPlayer(); renderTopCard(); renderMelds();
+  renderCpu(); renderPlayer(); renderTopCard(); renderMelds(); renderStagingArea();
   document.getElementById('pScore').textContent=G.pScore;
   document.getElementById('cScore').textContent=G.cScore;
   document.getElementById('deckCnt').textContent=G.deck.length+'張';
@@ -271,6 +302,9 @@ function render(){
     if(G.mustDiscard){
       badgeText='👤 吃牌後請打出一張';
       badgeColor='rgba(255,160,60,.95)';
+    } else if(G.stagingCard){
+      badgeText='🃏 已摸牌！選手牌組合或點待出牌出牌';
+      badgeColor='rgba(255,220,100,.9)';
     } else if(G.hasDrawn){
       badgeText='👤 請出牌或組合';
       badgeColor='rgba(255,220,100,.9)';
@@ -288,20 +322,26 @@ function render(){
   badge.classList.toggle('player-turn', G.turn==='player');
   const phEnabled = G.turn==='player' && !G.mustDiscard && !G.hasDrawn;
   document.getElementById('drawBtn').classList.toggle('off',!phEnabled);
-  // 放棄按鈕：未摸牌 OR（手牌空後才摸牌的drewFromEmpty狀態），且非mustDiscard
+  // 放棄按鈕：未摸牌 OR（手牌空後才摸牌的drewFromEmpty狀態），且非mustDiscard，且無待出牌
   const handEmpty0 = G.playerHand.length===0 && calcHuWithHand(G.playerHand,G.playerMelds,G.playerMeldsAn)<8;
-  const canGiveUp = G.turn==='player' && !G.mustDiscard
+  const canGiveUp = G.turn==='player' && !G.mustDiscard && !G.stagingCard
                     && (!G.hasDrawn || G.drewFromEmpty) && !handEmpty0;
   document.getElementById('giveUpBtn').classList.toggle('off',!canGiveUp);
   const meldBtn=document.getElementById('meldBtn');
-  const canMeld=_selectedForMeld.length>=2&&G.turn==='player'&&!G.mustDiscard;
+  // 待出牌區模式：至少選1張手牌即可顯示「與摸牌組合」；一般模式：至少選2張
+  const canMeld = G.stagingCard
+    ? (_selectedForMeld.length>=1 && G.turn==='player' && !G.mustDiscard)
+    : (_selectedForMeld.length>=2 && G.turn==='player' && !G.mustDiscard);
   meldBtn.style.display=canMeld?'block':'none';
+  meldBtn.textContent = G.stagingCard ? '與摸牌組合' : '組合';
   // Rule 20：暗胡按鈕：有效組合且 an > ming 時出現
   const anMeldBtn=document.getElementById('anMeldBtn');
   if(anMeldBtn){
     let showAn=false;
     if(canMeld){
-      const selCards=_selectedForMeld.map(x=>G.playerHand[x]);
+      const selCards = G.stagingCard
+        ? [G.stagingCard, ..._selectedForMeld.map(x=>G.playerHand[x])]
+        : _selectedForMeld.map(x=>G.playerHand[x]);
       const t=meldTypeForMeld(selCards);
       showAn=t.valid && meldType(selCards).an>meldType(selCards).ming;
     }
@@ -411,6 +451,21 @@ function renderMelds(){
     cm.appendChild(row);
   });
   document.getElementById('cpuHuN').textContent=calcHu(G.cpuMelds);
+}
+
+/* ── Staging area render ── */
+function renderStagingArea(){
+  const area = document.getElementById('stagingArea');
+  const el   = document.getElementById('stagingCardEl');
+  if(!area || !el) return;
+  if(!G.stagingCard){
+    area.classList.add('hidden');
+    return;
+  }
+  area.classList.remove('hidden');
+  const c = G.stagingCard;
+  el.className = `rcard big clr-${c.color} staging-card-anim`;
+  el.innerHTML = `${getCardIconHTML(c.suit)}<span class="rs">${c.suit}</span><span class="rc" style="font-size:8px">${COLOR_NAME[c.color]}</span>`;
 }
 
 /* ── Hu calculation ── */
@@ -609,6 +664,32 @@ function selectCard(i){
 
   if(G.phase!=='play') return;
 
+  // 待出牌區存在：只允許選手牌準備與摸牌組合，不可直接出手牌
+  if(G.stagingCard){
+    if(_selectedForMeld.includes(i)){
+      _selectedForMeld = _selectedForMeld.filter(x => x !== i);
+      G.selectedIdx = _selectedForMeld.length > 0 ? _selectedForMeld[_selectedForMeld.length-1] : -1;
+    } else {
+      _selectedForMeld.push(i);
+      G.selectedIdx = i;
+    }
+    if(_selectedForMeld.length >= 1){
+      const allCards = [G.stagingCard, ..._selectedForMeld.map(x => G.playerHand[x])];
+      const t = meldTypeForMeld(allCards);
+      if(t.valid && t.ming > 0){
+        toast('已選 ' + allCards.map(c=>COLOR_NAME[c.color]+c.suit).join(' ') + ' → ' + t.ming + '胡，按「與摸牌組合」確認');
+      } else if(t.valid){
+        toast('已選 ' + allCards.map(c=>COLOR_NAME[c.color]+c.suit).join(' ') + '（有效組合），按「與摸牌組合」確認');
+      } else {
+        toast('繼續加牌或點待出牌區直接出牌');
+      }
+    } else {
+      toast('選手牌後按「與摸牌組合」，或點待出牌區直接出牌');
+    }
+    render();
+    return;
+  }
+
   if(_selectedForMeld.includes(i)){
     if(_selectedForMeld.length === 1){
       // 單選再點同一張 → 出牌（需先摸牌或吃/碰後）
@@ -738,31 +819,75 @@ function playerGiveUp(){
 /* ── Draw ── */
 function playerDraw(){
   if(G.turn!=='player'||!G.active||G.mustDiscard) return;
-  if(G.hasDrawn){toast('本回合已摸牌');return;}
+  if(G.hasDrawn||G.stagingCard){toast('本回合已摸牌');return;}
   resetTugTimer();
   if(G.deck.length===0){toast('牌堆已空！');return;}
   if(G.playerHand.length===0) G.drewFromEmpty=true;
   const c=G.deck.pop();
 
-  // 新摸牌規則：先判斷是否可與現有手牌配對或組合
-  const cands = findEatCandidates(c, G.playerHand); // 摸牌前手牌（c 尚未加入）
-
-  G.playerHand.push(c);
+  // 待出牌區：牌不入手，先放暫存
+  G.stagingCard=c;
   G.hasDrawn=true;
-  sortHand(G.playerHand);
+  G.drawnCard=null;
 
-  if(cands.length > 0){
-    // 可配對/組合 → 收牌，解除 Rule 23，玩家可出任意一張
-    G.drawnCard = null;
-    save(); render();
-    toast(`摸牌：${COLOR_NAME[c.color]}${c.suit}　✅ 可配對，請出任一張手牌`);
-    notifyPlayer('🃏','收牌成功！','可配對，請打出任一張牌');
+  // 判斷是否可與手牌配對/組合
+  const cands=findEatCandidates(c, G.playerHand);
+  save(); render();
+  if(cands.length>0){
+    toast(`摸牌：${COLOR_NAME[c.color]}${c.suit}　可配對！選手牌後按「與摸牌組合」，或點待出牌區出牌`);
+    notifyPlayer('🃏','摸牌！','可與手牌配對，選手牌後組合，或點待出牌出牌');
   } else {
-    // 無法配對 → 嚴格 Rule 23，高亮顯示，只能出這張
-    G.drawnCard = c;
+    toast(`摸牌：${COLOR_NAME[c.color]}${c.suit}　無法配對，請點待出牌區出牌`);
+    notifyPlayer('🃏','無法配對！','請點選待出牌區出牌');
+  }
+}
+
+/* ── 出待出牌 ── */
+function playStagingCard(){
+  if(!G.stagingCard||G.turn!=='player'||!G.active) return;
+  const c=G.stagingCard;
+  G.stagingCard=null;
+  G.topCard=c;
+  G.hasDrawn=false;
+  G.drewFromEmpty=false;
+  G.drawnCard=null;
+  _selectedForMeld=[];
+  G.selectedIdx=-1;
+  save(); render();
+  toast(`出牌：${COLOR_NAME[c.color]}${c.suit}`);
+  G.turn='cpu'; render();
+  setTimeout(()=>cpuCheckEat(),700);
+}
+
+/* ── 與待出牌組合 ── */
+function formMeldWithStaging(handIdxs, isAn=false){
+  if(!G.stagingCard) return;
+  resetTugTimer();
+  const handCards=handIdxs.map(i=>G.playerHand[i]);
+  const allCards=[G.stagingCard,...handCards];
+  const t=meldType(allCards);
+  const actualAn=isAn && t.an>t.ming;
+  // 移除手牌
+  [...handIdxs].sort((a,b)=>b-a).forEach(i=>G.playerHand.splice(i,1));
+  G.playerMelds.push(allCards);
+  G.playerMeldsAn.push(actualAn);
+  G.stagingCard=null;
+  _selectedForMeld=[];
+  G.selectedIdx=-1;
+  sortHand(G.playerHand);
+  const label=allCards.map(c=>COLOR_NAME[c.color]+c.suit).join(' ');
+  if(actualAn) toast(`🀫 暗胡！${label} +${t.an}胡（暗）`);
+  else if(t.ming>0) toast(`✅ 組合完成！${label} +${t.ming}胡`);
+  else toast(`✅ 組合 ${label}（有效組合）`);
+  // 若手牌仍有牌，需打出一張；若已空則直接換電腦
+  if(G.playerHand.length>0){
+    G.mustDiscard=true;
     save(); render();
-    toast(`摸牌：${COLOR_NAME[c.color]}${c.suit}　❌ 無法配對，請點選此牌出牌`);
-    notifyPlayer('🃏','無法配對！','請點選高亮的牌出牌');
+    document.getElementById('discardHint').classList.remove('hidden');
+  } else {
+    save(); render();
+    G.turn='cpu'; render();
+    setTimeout(()=>cpuCheckEat(),700);
   }
 }
 

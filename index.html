@@ -152,6 +152,11 @@
     <div class="turn-badge" id="turnBadge">👤 玩家回合</div>
     <div class="play-zone" id="playZone"><span style="color:rgba(255,255,255,.25);font-size:12px">出牌區</span></div>
     <div class="color-req" id="colorReq"></div>
+    <!-- 待出牌區：摸牌後顯示，點選即出牌 -->
+    <div id="stagingArea" class="staging-area hidden" onclick="playStagingCard()">
+      <div class="staging-label">▼ 點此出牌</div>
+      <div id="stagingCardEl" class="rcard big"></div>
+    </div>
   </div>
 
   <div class="player-melds" id="playerMelds"></div>
