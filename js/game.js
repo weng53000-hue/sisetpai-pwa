@@ -743,15 +743,27 @@ function playerDraw(){
   if(G.deck.length===0){toast('牌堆已空！');return;}
   if(G.playerHand.length===0) G.drewFromEmpty=true;
   const c=G.deck.pop();
+
+  // 新摸牌規則：先判斷是否可與現有手牌配對或組合
+  const cands = findEatCandidates(c, G.playerHand); // 摸牌前手牌（c 尚未加入）
+
   G.playerHand.push(c);
   G.hasDrawn=true;
-  G.drawnCard=c;       // Rule 23：記錄此次摸到的牌
   sortHand(G.playerHand);
-  // Check if drawn card completes a meld
-  const meld=findMeldForCard(c,G.playerHand.filter((_,i)=>i!==G.playerHand.length-1));
-  save();render();
-  toast(`摸牌：${COLOR_NAME[c.color]}${c.suit}　⚠️ 此牌只能出牌或組合`);
-  notifyPlayer('🃏','摸牌完成！','摸進的牌只能出牌或組含摸牌的牌組');
+
+  if(cands.length > 0){
+    // 可配對/組合 → 收牌，解除 Rule 23，玩家可出任意一張
+    G.drawnCard = null;
+    save(); render();
+    toast(`摸牌：${COLOR_NAME[c.color]}${c.suit}　✅ 可配對，請出任一張手牌`);
+    notifyPlayer('🃏','收牌成功！','可配對，請打出任一張牌');
+  } else {
+    // 無法配對 → 嚴格 Rule 23，高亮顯示，只能出這張
+    G.drawnCard = c;
+    save(); render();
+    toast(`摸牌：${COLOR_NAME[c.color]}${c.suit}　❌ 無法配對，請點選此牌出牌`);
+    notifyPlayer('🃏','無法配對！','請點選高亮的牌出牌');
+  }
 }
 
 /* ── Eat check ── */
@@ -906,12 +918,7 @@ function doEat(){
   G.selectedIdx = -1;
   G.topCard=null;
   sortHand(G.playerHand);
-  // ✅ 吃牌後立即檢查：達 8 胡且散牌已清 → 直接勝利（Bug 2 fix：加入 Rule 15 檢查）
-  if(calcHuWithHand(G.playerHand, G.playerMelds, G.playerMeldsAn) >= 8 && isHandClearForWin(G.playerHand)){
-    save();
-    playerWins();
-    return;
-  }
+  // 吃牌後不自動胡牌，改由 checkHuBtn() 顯示胡牌按鈕讓玩家自行選擇
   G.mustDiscard=true;
   G.turn='player';
   render();
@@ -1160,10 +1167,10 @@ function checkHuBtn(){
   const btn = document.getElementById('huBtn');
   const hint = document.getElementById('discardHint');
 
-  // 吃牌後必須棄牌，此時不能宣告胡牌
   hint.classList.toggle('hidden', !G.mustDiscard);
-  if(G.mustDiscard || G.turn !== 'player' || !G.active){
+  if(G.turn !== 'player' || !G.active){
     btn.classList.remove('show');
+    btn.classList.remove('_notified');
     return;
   }
 
@@ -1172,6 +1179,7 @@ function checkHuBtn(){
   const handClear = isHandClearForWin(G.playerHand);
 
   // 胡牌按鈕顯示條件：組合區 + 手中將帥單牌 >= 8 胡，且非將帥牌已全部組合或成對
+  // 吃牌後（mustDiscard=true）達條件同樣顯示，由玩家自行選擇胡牌或棄牌
   const wrap = document.getElementById('huBtnWrap');
   if(hu >= 8 && handClear){
     btn.classList.add('show');
@@ -1192,8 +1200,7 @@ function checkHuBtn(){
 function declareHu(){
   if(!G.active) return;
   if(G.turn !== 'player'){ toast('❌ 現在是電腦的回合'); return; }
-  if(G.mustDiscard){ toast('❌ 請先打出一張牌'); return; }
-
+  // 吃牌後（mustDiscard=true）達條件仍可宣告胡牌，不再攔截
   // Rule 15：非將帥散牌必須全部組合或成對才能宣告胡牌
   if(!isHandClearForWin(G.playerHand)){
     toast('❌ 手中還有散牌未組合，請先組合或成對');
