@@ -366,14 +366,17 @@ function renderMelds(){
     const row=document.createElement('div');
     row.className='meld-grp'+(isAn?' meld-an':'');
     if(isAn){
-      // 暗胡：蓋牌顯示，每張牌背面加「暗」標
+      // 暗胡：蓋牌顯示，每張牌背面加「暗」標（UI #4 fix：cards 包在橫排 wrapper 內）
+      const cardRow=document.createElement('div');
+      cardRow.className='meld-an-cards';
       m.forEach(()=>{
         const mc=document.createElement('div');
         mc.className='mc mc-an';
         mc.textContent='暗';
-        row.appendChild(mc);
+        cardRow.appendChild(mc);
       });
-      // 暗胡台數標籤
+      row.appendChild(cardRow);
+      // 暗胡台數標籤（在 column flex 的下一行）
       const badge=document.createElement('div');
       badge.className='meld-an-badge';
       badge.textContent=`${t.an}胡`;
