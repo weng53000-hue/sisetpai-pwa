@@ -88,8 +88,12 @@ html,body{height:100%;overflow:hidden;font-family:'Microsoft JhengHei','微軟�
 .player-melds{position:absolute;right:6px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:3px;align-items:flex-end;}
 
 /* Meld mini cards */
-.meld-grp{display:flex;gap:1px;}
+.meld-grp{display:flex;gap:1px;position:relative;}
 .mc{width:18px;height:26px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;border:1px solid rgba(255,255,255,.2);box-shadow:0 1px 3px rgba(0,0,0,.3);}
+/* Rule 20：暗胡牌組 */
+.meld-an{opacity:.92;}
+.mc-an{background:linear-gradient(135deg,#3a1a6a,#1a0a3a);color:rgba(200,160,255,.9);border-color:rgba(160,100,220,.5);font-size:8px;letter-spacing:0;}
+.meld-an-badge{position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);font-size:8px;color:rgba(200,160,255,.9);white-space:nowrap;font-weight:900;}
 
 /* Player zone */
 .pzone{position:absolute;bottom:0;left:0;right:0;padding-bottom:12px;}

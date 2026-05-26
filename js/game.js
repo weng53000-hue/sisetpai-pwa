@@ -40,7 +40,7 @@ function cardKey(c){return c.color+'_'+c.suit;}
 /* ── State ── */
 let G = {
   deck:[], playerHand:[], cpuHand:[],
-  playerMelds:[], cpuMelds:[],
+  playerMelds:[], playerMeldsAn:[], cpuMelds:[],
   topCard:null,
   turn:'player',      // 'player' | 'cpu'
   phase:'play',       // 'play' | 'eat' | 'discard'
@@ -74,7 +74,7 @@ function startGameActual(scene,pattern){
   G.playerHand=[];G.cpuHand=[];
   G.playerMelds=[];G.cpuMelds=[];
   G.topCard=null;G.turn='player';G.phase='play';
-  G.selectedIdx=-1;G.hasDrawn=false;G.drewFromEmpty=false;G.mustDiscard=false;G.drawnCard=null;G.active=true;
+  G.selectedIdx=-1;G.hasDrawn=false;G.drewFromEmpty=false;G.mustDiscard=false;G.drawnCard=null;G.playerMeldsAn=[];G.active=true;
   G.scene=scene||'default'; G.cardPattern=pattern||'none';
   // Deal 18 cards each
   for(let i=0;i<18;i++){G.playerHand.push(G.deck.pop());G.cpuHand.push(G.deck.pop());}
@@ -88,7 +88,7 @@ function startGameActual(scene,pattern){
 
 function loadGame(){
   const s=localStorage.getItem('scp2');
-  if(s){G=JSON.parse(s);G.active=true;if(G.drawnCard===undefined)G.drawnCard=null;applySceneClasses(G.scene||'default',G.cardPattern||'none');show('game');render();toast('繼續上次牌局');}
+  if(s){G=JSON.parse(s);G.active=true;if(G.drawnCard===undefined)G.drawnCard=null;if(!G.playerMeldsAn)G.playerMeldsAn=[];applySceneClasses(G.scene||'default',G.cardPattern||'none');show('game');render();toast('繼續上次牌局');}
 }
 function save(){localStorage.setItem('scp2',JSON.stringify(G));document.getElementById('contBtn').style.display='block';}
 function pauseGame(){save();showModal('暫停',[{l:'繼續遊戲',c:'p',f:()=>{closeModal();show('game');}},{l:'回主頁',c:'s',f:()=>{closeModal();show('home');}},{l:'🗑️ 結束遊戲',c:'d',f:()=>endGame()}]);}
@@ -212,10 +212,24 @@ function tryFormMeld(){
   const selCards = _selectedForMeld.map(x => G.playerHand[x]);
   const t = meldTypeForMeld(selCards);
   if(t.valid){
-    formPlayerMeld([..._selectedForMeld]);
+    formPlayerMeld([..._selectedForMeld], false);
   } else {
     toast('❌ 這幾張牌不能組合，請重新選取');
-    // 自動歸位：清空所有選取
+    _selectedForMeld = [];
+    G.selectedIdx = -1;
+    render();
+  }
+}
+
+// Rule 20：暗胡按鈕觸發
+function tryFormMeldAn(){
+  if(_selectedForMeld.length < 2){ toast('請先選取 2 張以上的牌才能組合'); return; }
+  const selCards = _selectedForMeld.map(x => G.playerHand[x]);
+  const t = meldTypeForMeld(selCards);
+  if(t.valid){
+    formPlayerMeld([..._selectedForMeld], true);
+  } else {
+    toast('❌ 這幾張牌不能組合，請重新選取');
     _selectedForMeld = [];
     G.selectedIdx = -1;
     render();
@@ -275,12 +289,24 @@ function render(){
   const phEnabled = G.turn==='player' && !G.mustDiscard && !G.hasDrawn;
   document.getElementById('drawBtn').classList.toggle('off',!phEnabled);
   // 放棄按鈕：未摸牌 OR（手牌空後才摸牌的drewFromEmpty狀態），且非mustDiscard
-  const handEmpty0 = G.playerHand.length===0 && calcHuWithHand(G.playerHand,G.playerMelds)<8;
+  const handEmpty0 = G.playerHand.length===0 && calcHuWithHand(G.playerHand,G.playerMelds,G.playerMeldsAn)<8;
   const canGiveUp = G.turn==='player' && !G.mustDiscard
                     && (!G.hasDrawn || G.drewFromEmpty) && !handEmpty0;
   document.getElementById('giveUpBtn').classList.toggle('off',!canGiveUp);
   const meldBtn=document.getElementById('meldBtn');
-  meldBtn.style.display=(_selectedForMeld.length>=2&&G.turn==='player'&&!G.mustDiscard)?'block':'none';
+  const canMeld=_selectedForMeld.length>=2&&G.turn==='player'&&!G.mustDiscard;
+  meldBtn.style.display=canMeld?'block':'none';
+  // Rule 20：暗胡按鈕：有效組合且 an > ming 時出現
+  const anMeldBtn=document.getElementById('anMeldBtn');
+  if(anMeldBtn){
+    let showAn=false;
+    if(canMeld){
+      const selCards=_selectedForMeld.map(x=>G.playerHand[x]);
+      const t=meldTypeForMeld(selCards);
+      showAn=t.valid && meldType(selCards).an>meldType(selCards).ming;
+    }
+    anMeldBtn.style.display=showAn?'block':'none';
+  }
   const cancelSelBtn=document.getElementById('cancelSelBtn');
   cancelSelBtn.style.display=(_selectedForMeld.length>=1&&G.turn==='player')?'block':'none';
   checkHuBtn();
@@ -334,16 +360,34 @@ function renderMelds(){
   // Player melds (right side)
   const pm=document.getElementById('playerMelds');
   pm.innerHTML='';
-  G.playerMelds.forEach(m=>{
-    const row=document.createElement('div');row.className='meld-grp';
-    m.forEach(c=>{
-      const mc=document.createElement('div');
-      mc.className=`mc clr-${c.color}`;mc.textContent=c.suit;
-      row.appendChild(mc);
-    });
+  G.playerMelds.forEach((m,idx)=>{
+    const isAn=G.playerMeldsAn&&G.playerMeldsAn[idx];
+    const t=meldType(m);
+    const row=document.createElement('div');
+    row.className='meld-grp'+(isAn?' meld-an':'');
+    if(isAn){
+      // 暗胡：蓋牌顯示，每張牌背面加「暗」標
+      m.forEach(()=>{
+        const mc=document.createElement('div');
+        mc.className='mc mc-an';
+        mc.textContent='暗';
+        row.appendChild(mc);
+      });
+      // 暗胡台數標籤
+      const badge=document.createElement('div');
+      badge.className='meld-an-badge';
+      badge.textContent=`${t.an}胡`;
+      row.appendChild(badge);
+    } else {
+      m.forEach(c=>{
+        const mc=document.createElement('div');
+        mc.className=`mc clr-${c.color}`;mc.textContent=c.suit;
+        row.appendChild(mc);
+      });
+    }
     pm.appendChild(row);
   });
-  document.getElementById('playerHuN').textContent=calcHuWithHand(G.playerHand, G.playerMelds);
+  document.getElementById('playerHuN').textContent=calcHuWithHand(G.playerHand, G.playerMelds, G.playerMeldsAn);
   // 動態調整手牌區右側空間，避免被組合牌遮蓋
   requestAnimationFrame(()=>{
     const pw=document.getElementById('playerHandWrap');
@@ -418,16 +462,20 @@ function meldType(cards){
   return {ming:0,an:0,label:'?'};
 }
 
-function totalHu(melds){
-  return melds.reduce((s,m)=>s+meldType(m).ming,0);
+// meldsAn：與 melds 同長度的 bool[]，true 表示該組為暗胡（計 .an 值）
+function totalHu(melds, meldsAn){
+  return melds.reduce((s,m,i)=>{
+    const t=meldType(m);
+    return s+(meldsAn&&meldsAn[i]?t.an:t.ming);
+  },0);
 }
 
 // 判斷一張牌是否為將/帥
 function isJiang(card){ return card.suit === JIANG[card.color]; }
 
 // 計算含手中將/帥單牌的總胡數（每張未成組的將/帥算 1 胡）
-function calcHuWithHand(hand, melds){
-  let hu = totalHu(melds);
+function calcHuWithHand(hand, melds, meldsAn){
+  let hu = totalHu(melds, meldsAn);
   hand.forEach(c => { if(isJiang(c)) hu += 1; });
   return hu;
 }
@@ -603,7 +651,7 @@ function selectCard(i){
   render(); // 必須用完整 render 才能更新組合按鈕
 }
 
-function formPlayerMeld(idxs){
+function formPlayerMeld(idxs, isAn=false){
   resetTugTimer();
   const cards = idxs.map(i => G.playerHand[i]);
   // Rule 23：摸牌後，組合必須包含摸到的牌
@@ -613,15 +661,20 @@ function formPlayerMeld(idxs){
     return;
   }
   const t = meldType(cards);
+  // Rule 20：暗胡僅在 an > ming 時有效，否則降為明胡
+  const actualAn = isAn && t.an > t.ming;
   // Remove from hand (descending order to preserve indices)
   [...idxs].sort((a,b)=>b-a).forEach(i => G.playerHand.splice(i,1));
   G.playerMelds.push(cards);
+  G.playerMeldsAn.push(actualAn);   // Rule 20：記錄是否暗胡
   _selectedForMeld = [];
   G.selectedIdx = -1;
   G.drawnCard = null;   // Rule 23：組合完成即解除摸牌限制
   sortHand(G.playerHand);
   const label = cards.map(c => COLOR_NAME[c.color]+c.suit).join(' ');
-  if(t.ming > 0){
+  if(actualAn){
+    toast(`🀫 暗胡！${label} +${t.an}胡（暗）`);
+  } else if(t.ming > 0){
     toast('✅ 組合完成！' + label + ' +' + t.ming + '胡');
   } else {
     toast('✅ 組合 ' + label + '（有效組合，不計胡）');
@@ -663,7 +716,7 @@ function playerGiveUp(){
   // 已摸牌但非「手牌空後摸牌」→ 不能放棄
   if(G.hasDrawn && !G.drewFromEmpty){toast('⚠️ 已摸牌，請出牌或組合');return;}
   // 手牌空且台數未達8，強制摸牌後才能放棄
-  if(!G.hasDrawn && G.playerHand.length===0 && calcHuWithHand(G.playerHand,G.playerMelds)<8){
+  if(!G.hasDrawn && G.playerHand.length===0 && calcHuWithHand(G.playerHand,G.playerMelds,G.playerMeldsAn)<8){
     toast('⚠️ 手牌空且台數不足，請先摸牌');
     return;
   }
@@ -850,7 +903,7 @@ function doEat(){
   G.topCard=null;
   sortHand(G.playerHand);
   // ✅ 吃牌後立即檢查：達 8 胡直接勝利，不需再打牌
-  if(calcHuWithHand(G.playerHand, G.playerMelds) >= 8){
+  if(calcHuWithHand(G.playerHand, G.playerMelds, G.playerMeldsAn) >= 8){
     save();
     playerWins();
     return;
@@ -1110,7 +1163,7 @@ function checkHuBtn(){
     return;
   }
 
-  const hu = calcHuWithHand(G.playerHand, G.playerMelds);
+  const hu = calcHuWithHand(G.playerHand, G.playerMelds, G.playerMeldsAn);
   // Rule 15：非將帥散牌必須全部組合，或全部成對（同色同字 / 兵卒跨色）才能胡牌
   const handClear = isHandClearForWin(G.playerHand);
 
@@ -1143,7 +1196,7 @@ function declareHu(){
     return;
   }
 
-  const hu = calcHuWithHand(G.playerHand, G.playerMelds);
+  const hu = calcHuWithHand(G.playerHand, G.playerMelds, G.playerMeldsAn);
 
   if(hu >= 8){
     playerWins();
@@ -1156,7 +1209,7 @@ function playerWins(){
   G.active=false; G.pScore++;
   localStorage.removeItem('scp2');
   document.getElementById('contBtn').style.display='none';
-  const hu = calcHuWithHand(G.playerHand, G.playerMelds);
+  const hu = calcHuWithHand(G.playerHand, G.playerMelds, G.playerMeldsAn);
   showModal(`🎉 胡牌！${hu}胡`,[
     {l:'再來一局',c:'p',f:()=>{closeModal();startNew();}},
     {l:'回主頁',c:'s',f:()=>{closeModal();show('home');}}
