@@ -145,6 +145,9 @@ html,body{height:100%;overflow:hidden;font-family:'Microsoft JhengHei','微軟�
 }
 .pcard:first-child{margin-left:0;}
 .pcard.sel{transform:translateY(-18px);box-shadow:0 12px 22px rgba(0,0,0,.55);border-color:#fff;z-index:20;}
+/* Rule 23：摸進的牌（金框＋上移標示） */
+.pcard.drawn{border-color:#FFD700!important;box-shadow:0 0 10px rgba(255,215,0,.7),0 4px 10px rgba(0,0,0,.4);transform:translateY(-8px);z-index:10;}
+.pcard.drawn.sel{transform:translateY(-18px);}
 .pcard .cs{font-size:18px;font-weight:900;line-height:1;}
 .pcard .cc{font-size:9px;opacity:.75;margin-top:1px;}
 

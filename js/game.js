@@ -50,6 +50,7 @@ let G = {
   hasDrawn:false,
   drewFromEmpty:false,
   mustDiscard:false,
+  drawnCard:null,       // Rule 23：記錄本回合摸到的牌（物件參考）
   pScore:0, cScore:0,
   active:false,
 };
@@ -73,7 +74,7 @@ function startGameActual(scene,pattern){
   G.playerHand=[];G.cpuHand=[];
   G.playerMelds=[];G.cpuMelds=[];
   G.topCard=null;G.turn='player';G.phase='play';
-  G.selectedIdx=-1;G.hasDrawn=false;G.drewFromEmpty=false;G.mustDiscard=false;G.active=true;
+  G.selectedIdx=-1;G.hasDrawn=false;G.drewFromEmpty=false;G.mustDiscard=false;G.drawnCard=null;G.active=true;
   G.scene=scene||'default'; G.cardPattern=pattern||'none';
   // Deal 18 cards each
   for(let i=0;i<18;i++){G.playerHand.push(G.deck.pop());G.cpuHand.push(G.deck.pop());}
@@ -87,7 +88,7 @@ function startGameActual(scene,pattern){
 
 function loadGame(){
   const s=localStorage.getItem('scp2');
-  if(s){G=JSON.parse(s);G.active=true;applySceneClasses(G.scene||'default',G.cardPattern||'none');show('game');render();toast('繼續上次牌局');}
+  if(s){G=JSON.parse(s);G.active=true;if(G.drawnCard===undefined)G.drawnCard=null;applySceneClasses(G.scene||'default',G.cardPattern||'none');show('game');render();toast('繼續上次牌局');}
 }
 function save(){localStorage.setItem('scp2',JSON.stringify(G));document.getElementById('contBtn').style.display='block';}
 function pauseGame(){save();showModal('暫停',[{l:'繼續遊戲',c:'p',f:()=>{closeModal();show('game');}},{l:'回主頁',c:'s',f:()=>{closeModal();show('home');}},{l:'🗑️ 結束遊戲',c:'d',f:()=>endGame()}]);}
@@ -310,8 +311,9 @@ function renderPlayer(){
   G.playerHand.forEach((c,i)=>{
     const inMeld=_selectedForMeld.includes(i);
     const isSel=G.selectedIdx===i;
+    const isDrawn=G.drawnCard && c===G.drawnCard;  // Rule 23：摸到的牌高亮
     const d=document.createElement('div');
-    d.className=`pcard clr-${c.color}${isSel||inMeld?' sel':''}`;
+    d.className=`pcard clr-${c.color}${isSel||inMeld?' sel':''}${isDrawn?' drawn':''}`;
     if(inMeld&&!isSel) d.style.borderColor='rgba(255,220,100,.8)';
     d.innerHTML=`${getCardIconHTML(c.suit)}<span class="cs">${c.suit}</span><span class="cc">${COLOR_NAME[c.color]}</span>`;
     d.onclick=()=>selectCard(i);
@@ -563,6 +565,13 @@ function selectCard(i){
         toast('⚠️ 請先摸牌或放棄，才能出牌');
         return;
       }
+      // Rule 23：摸牌後只能出摸進來的那張
+      if(G.drawnCard && G.playerHand[i] !== G.drawnCard){
+        const di = G.playerHand.indexOf(G.drawnCard);
+        const dc = G.drawnCard;
+        toast(`⚠️ 摸牌後只能出 ${COLOR_NAME[dc.color]}${dc.suit}，或組含摸牌的牌組`);
+        return;
+      }
       _selectedForMeld = [];
       G.selectedIdx = -1;
       playCard(i);
@@ -597,12 +606,19 @@ function selectCard(i){
 function formPlayerMeld(idxs){
   resetTugTimer();
   const cards = idxs.map(i => G.playerHand[i]);
+  // Rule 23：摸牌後，組合必須包含摸到的牌
+  if(G.hasDrawn && G.drawnCard && !cards.includes(G.drawnCard)){
+    const dc = G.drawnCard;
+    toast(`⚠️ 摸牌後組合必須包含摸到的牌（${COLOR_NAME[dc.color]}${dc.suit}）`);
+    return;
+  }
   const t = meldType(cards);
   // Remove from hand (descending order to preserve indices)
   [...idxs].sort((a,b)=>b-a).forEach(i => G.playerHand.splice(i,1));
   G.playerMelds.push(cards);
   _selectedForMeld = [];
   G.selectedIdx = -1;
+  G.drawnCard = null;   // Rule 23：組合完成即解除摸牌限制
   sortHand(G.playerHand);
   const label = cards.map(c => COLOR_NAME[c.color]+c.suit).join(' ');
   if(t.ming > 0){
@@ -618,7 +634,7 @@ function playCard(i){
   const card=G.playerHand[i];
   G.playerHand.splice(i,1);
   G.topCard=card;
-  G.selectedIdx=-1; _selectedForMeld=[]; G.hasDrawn=false; G.drewFromEmpty=false;
+  G.selectedIdx=-1; _selectedForMeld=[]; G.hasDrawn=false; G.drewFromEmpty=false; G.drawnCard=null;
   sortHand(G.playerHand);
   save(); render();
   toast(`出牌：${COLOR_NAME[card.color]}${card.suit}`);
@@ -631,6 +647,7 @@ function discardCard(i){
   G.playerHand.splice(i,1);
   G.topCard=card;
   G.mustDiscard=false;
+  G.drawnCard=null;
   G.selectedIdx=-1;
   _selectedForMeld=[];
   sortHand(G.playerHand);
@@ -654,6 +671,7 @@ function playerGiveUp(){
   _selectedForMeld=[];
   G.selectedIdx=-1;
   G.drewFromEmpty=false;
+  G.drawnCard=null;
   G.turn='cpu';
   G.hasDrawn=false;
   save();render();
@@ -671,12 +689,13 @@ function playerDraw(){
   const c=G.deck.pop();
   G.playerHand.push(c);
   G.hasDrawn=true;
+  G.drawnCard=c;       // Rule 23：記錄此次摸到的牌
   sortHand(G.playerHand);
   // Check if drawn card completes a meld
   const meld=findMeldForCard(c,G.playerHand.filter((_,i)=>i!==G.playerHand.length-1));
   save();render();
-  toast(`摸牌：${COLOR_NAME[c.color]}${c.suit}`);
-  notifyPlayer('🃏','摸牌完成！','請出牌或組合手牌');
+  toast(`摸牌：${COLOR_NAME[c.color]}${c.suit}　⚠️ 此牌只能出牌或組合`);
+  notifyPlayer('🃏','摸牌完成！','摸進的牌只能出牌或組含摸牌的牌組');
 }
 
 /* ── Eat check ── */
@@ -899,6 +918,7 @@ function wakeUpCpu(auto=false){
   G.turn='player';
   G.hasDrawn=false;
   G.mustDiscard=false;
+  G.drawnCard=null;
   G.topCard=null;
   _selectedForMeld=[];
   G.selectedIdx=-1;
